@@ -21,6 +21,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use App\Rules\UniqueChequeId;
+use Barryvdh\DomPDF\Facade\Pdf;
 
 
 
@@ -40,9 +41,9 @@ class ReglementChequeController extends Controller
 
         // $checks = Check::all();
         $checks = Check::doesntHave('reglementCheque')
-        ->doesntHave('chequeDebit')
-        ->doesntHave('chequeAnnule')
-        ->get();
+            ->doesntHave('chequeDebit')
+            ->doesntHave('chequeAnnule')
+            ->get();
         $services = Service::all();
         $benefiiaires = BeneCompte::all();
         $comptes = CompteDepense::all();
@@ -317,5 +318,34 @@ class ReglementChequeController extends Controller
             // Log::info('dazetch');
             return redirect()->back()->with('error', 'Error');
         }
+    }
+    public function generateReglementChequePDF($id)
+    {
+        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages'])->findOrFail($id);
+        $date_reglement = $reglements->date_reglement;
+        $cheque = $reglements->cheque->number;
+        $compte = $reglements->compte->nom;
+        $bene = $reglements->bene->nom;
+        $service = $reglements->service->nom;
+        $referance = $reglements->referance;
+        $echeance =   $reglements->echeance;
+        $montant =    $reglements->montant;
+
+        $data = [
+            'title'=> $date_reglement,
+            'date' => date('m/d/Y'),
+            // 'date_reglement' =>  $date_reglement,
+            // 'cheque' => $cheque ,
+            // 'compte' => $compte,
+            // 'bene' => $bene,
+            // 'service' => $service,
+            // 'referance' => $referance,
+            // 'echeance' => $echeance,
+            // 'montant' => $montant,
+            'reglements' => $reglements
+        ];
+
+        $pdf = PDF::loadView('pdf.reglement_cheque_pdf', $data);
+        return $pdf->download("reglement_cheque_.pdf");
     }
 }

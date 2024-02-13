@@ -296,6 +296,7 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         Route::get('/show/reglement-cheque/{id}', 'ShowReglementCheque')->name('show.reglement-cheque');
         // Route::get('/ajouter/reglement-cheque-test', 'testFunction')->name('ajouter.reglement-cheque-test');
         
+        Route::get('/download-reglement-pdf/{id}', 'generateReglementChequePDF')->name('download.reglement.pdf');
 
         Route::get('/checkIfChequeSelected', 'checkIfChequeSelected')->name('checkIfChequeSelected');
     });

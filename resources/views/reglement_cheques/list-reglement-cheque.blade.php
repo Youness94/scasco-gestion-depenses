@@ -76,7 +76,8 @@
                                         <td>{{ $reglement->service->nom }}</td>
                                         <td>{{ $reglement->referance }}</td>
                                         <td>{{ $reglement->echeance }}</td>
-                                        <td>{{ $reglement->montant }}</td>
+                                        <td>{{ number_format(($reglement->montant ?? 0.00),2)}}</td>
+                                        
                                         <td>
                                             @if ($reglement->RelChequeImages->isNotEmpty())
                                             <img src="{{ asset('public/reglement_cheque_images/' . $reglement->RelChequeImages[0]->images) }}" alt="Image" style="width: 50px; height: 50px; border: 1px solid #3498db; border-radius:50%;">
@@ -104,7 +105,11 @@
                                                 <a href="{{route('show.reglement-cheque',$reglement->id)}}" class="btn btn-sm bg-danger-light">
                                                     <i class="feather-eye"></i>
                                                 </a>
+                                                <a href="{{ route('download.reglement.pdf', ['id' => $reglement->id]) }}" class="btn btn-sm bg-danger-light">
+                                                    <i class="fas fa-download"></i>
+                                                </a>
                                                 @endif
+
                                             </div>
                                         </td>
                                     </tr>

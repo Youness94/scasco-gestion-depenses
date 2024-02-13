@@ -55,6 +55,7 @@
                                     <th>Modifier</th>
                                     <th>Supprimer</th>
                                     <th>Afficher</th>
+                                    
 
                                 </tr>
                             </thead>
@@ -82,6 +83,7 @@
                                 <td>
                                     <a href="{{route('show.affectation',$item->id)}}" class="btn btn-inverse-danger"><i class="feather-eye"></i></a>
                                 </td>
+                                
 
                             </tr>
                             @endforeach
