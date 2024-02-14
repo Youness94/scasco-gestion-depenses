@@ -28,6 +28,8 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReglementChequeController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SousCompteController;
+use App\Http\Controllers\Effet\EffetCompteController;
+use App\Http\Controllers\Effet\ReglementEffetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 
@@ -152,6 +154,35 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
 
         Route::get('/show/effet-affectation/{id}', 'ShowEffetAffectation')->name('show.effet-affectation');
     });
+
+    Route::controller(EffetCompteController::class)->group(function () {
+        Route::get('/tous/compte-effets', 'AllCompteEffets')->name('all.compte-effets');
+        Route::get('/ajouter/compte-effet', 'AddCompteEffet')->name('add.compte-effet');
+        Route::post('/store/compte-effet', 'StoreCompteEffet')->name('store.compte-effet');
+        Route::get('/modifier/compte-effet/{id}', 'EditCompteEffet')->name('edit.compte-effet');
+        Route::post('/update/compte-effet', 'UpdateCompteEffet')->name('update.compte-effet');
+        Route::get('/delete/compte-effet/{id}', 'DeleteCompteEffet')->name('delete.compte-effet');
+    });
+
+    Route::controller(ReglementEffetController::class)->group(function () {
+        Route::get('/tous/reglement-effets', 'AllReglementEffets')->name('all.reglement-effets');
+        Route::get('/ajouter/reglement-effet', 'AddReglementEffet')->name('add.reglement-effet');
+        Route::post('/store/reglement-effet', 'StoreReglementEffet')->name('store.reglement-effet');
+        Route::get('/modifier/reglement-effet/{id}', 'EditReglementEffet')->name('edit.reglement-effet');
+        Route::post('/update/reglement-effet/{id}', 'UpdateReglementEffet')->name('update.reglement-effet');
+        Route::get('/delete/reglement-effet/{id}', 'DeleteReglementEffet')->name('delete.reglement-effet');
+        Route::get('/show/reglement-effet/{id}', 'ShowReglementEffet')->name('show.reglement-effet');
+        // Route::get('/ajouter/reglement-cheque-test', 'testFunction')->name('ajouter.reglement-cheque-test');
+        
+        Route::get('/download-reglement-effet-pdf/{id}', 'generateReglementEffetPDF')->name('download.reglement.effet.pdf');
+
+        Route::get('/checkIfEffetSelected', 'checkIfEffetSelected')->name('checkIfEffetSelected');
+    });
+
+
+
+
+    // ============ Chéquier Routes =========== // 
 
 
     Route::controller(CheckbookController::class,)->group(function () {

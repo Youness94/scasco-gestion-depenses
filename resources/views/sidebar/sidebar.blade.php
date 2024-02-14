@@ -5,7 +5,7 @@
                 <li class="menu-title">
                     <span>Menu Principal</span>
                 </li>
-                
+
                 <li class="nav-item">
                     <a href="{{route('accueil')}}" class="nav-link">
                         <i class="link-icon" data-feather="box"></i>
@@ -26,7 +26,7 @@
                 </li>
                 @endif
 
-               
+
                 <!-- <li class="submenu">
                     <a href="#"><i class="fas fa-clipboard"></i>
                         <span>Productions</span>
@@ -55,7 +55,7 @@
                     </ul>
                 </li> -->
 
-                
+
                 <li class="submenu">
                     <a href="#"><i class="fas fa-clipboard"></i>
                         <span>Réglements/chèque</span>
@@ -64,7 +64,7 @@
                     <ul>
                         <li><a href="{{ route('all.reglement-cheques') }}">Réglements</a></li>
                         <li><a href="{{ route('add.reglement-cheque') }}">Ajouter Réglement</a></li>
-                        
+
                     </ul>
                 </li>
                 <li class="submenu">
@@ -75,11 +75,33 @@
                     <ul>
                         <li><a href="{{ route('all.checks-debit') }}">Chéques débits</a></li>
                         <li><a href="{{ route('add.check-debit') }}">Ajouter chéque</a></li>
-                       
+
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-clipboard"></i>
+                        <span>Chéques Annulés</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('all.checks-cancelled') }}">Chéques Annulés</a></li>
+                        <li><a href="{{ route('add.check-cancelled') }}">Ajouter chéque annulé</a></li>
+
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-clipboard"></i>
+                        <span>Réglements/Effet</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('all.reglement-effets') }}">Réglements</a></li>
+                        <li><a href="{{ route('add.reglement-effet') }}">Ajouter Réglement</a></li>
+
                     </ul>
                 </li>
                 @if (Session::get('role_name') === 'Super Admin')
-                
+
                 <li class="menu-title">
                     <span>Gestion</span>
                 </li>
@@ -94,7 +116,7 @@
                         <li><a href="{{ route('add.checkbook') }}">Ajouter chéquier</a></li>
                     </ul>
                 </li> -->
-                
+
                 <li class="submenu">
                     <a href="#"><i class="fas fa-cog"></i>
                         <span>Paramètres/chèques</span>
@@ -103,23 +125,13 @@
                     <ul>
                         <li><a href="{{ route('all.checkbooks') }}">chéquiers</a></li>
                         <!-- <li><a href="{{ route('add.checkbook') }}">Ajouter chéquier</a></li> -->
-                        <li><a href="{{ route('all.compagnies') }}">Compagnies</a></li>
-                        <!-- <li><a href="{{ route('add.compagnie') }}">Ajouter compagnie</a></li> -->
-                        <li><a href="{{ route('all.banks') }}">Banques</a></li>
-                        <!-- <li><a href="{{ route('add.bank') }}">Ajouter Banque</a></li> -->
-                        <li><a href="{{ route('all.services') }}">Services</a></li>
-                        <!-- <li><a href="{{ route('add.service') }}">Ajouter Service</a></li> -->
-                        <li><a href="{{ route('all.courtiers') }}">Courtiers</a></li>
-                        <!-- <li><a href="{{ route('add.courtier') }}">Ajouter Courtier</a></li> -->
+                        
                         <li><a href="{{ route('all.affectations') }}">Affectations</a></li>
                         <!-- <li><a href="{{ route('add.affectation') }}">Ajouter Affectation</a></li> -->
-                        <li><a href="{{ route('all.sous-comptes') }}">Sous comptes</a></li>
-                        <!-- <li><a href="{{ route('add.sous-compte') }}">Ajouter Sous compte</a></li> -->
+                        
                         <li><a href="{{ route('all.compte-depenses') }}">Compte de dépenses</a></li>
                         <!-- <li><a href="{{ route('add.compte-depense') }}">Ajouter Compte de dépense</a></li> -->
-                        <li><a href="{{ route('all.bene-comptes') }}">Bénéficiaires par comptes</a></li>
-                        <!-- <li><a href="{{ route('add.bene-compte') }}">Ajouter Bénéficiaire par compte</a></li> -->
-                        
+                    
                     </ul>
                 </li>
 
@@ -132,31 +144,70 @@
                         <li><a href="{{ route('all.carnets-effets') }}">Carnets Effets</a></li>
                         <!-- <li><a href="{{ route('add.carnet-effet') }}">Ajouter Effet</a></li> -->
 
-                        <!-- <li><a href="{{ route('all.compagnies') }}">Compagnies</a></li> -->
-                        <!-- <li><a href="{{ route('add.compagnie') }}">Ajouter compagnie</a></li> -->
-
-                        <!-- <li><a href="{{ route('all.banks') }}">Banques</a></li> -->
-                        <!-- <li><a href="{{ route('add.bank') }}">Ajouter Banque</a></li> -->
-
-                        <!-- <li><a href="{{ route('all.effet-services') }}">Services</a></li> -->
-                        <!-- <li><a href="{{ route('add.effet-service') }}">Ajouter Service</a></li> -->
-
-                        <!-- <li><a href="{{ route('all.courtiers') }}">Courtiers</a></li> -->
-                        <!-- <li><a href="{{ route('add.courtier') }}">Ajouter Courtier</a></li> -->
-
                         <li><a href="{{ route('all.effet-affectations') }}">Affectations</a></li>
-                        <li><a href="{{ route('add.effet-affectation') }}">Ajouter Affectation</a></li>
+                        <!-- <li><a href="{{ route('add.effet-affectation') }}">Ajouter Affectation</a></li> -->
 
-                        <!-- <li><a href="{{ route('all.sous-comptes') }}">Sous comptes</a></li> -->
-                        <!-- <li><a href="{{ route('add.sous-compte') }}">Ajouter Sous compte</a></li> -->
-
-                        <!-- <li><a href="{{ route('all.compte-depenses') }}">Compte de dépenses</a></li> -->
-                        <!-- <li><a href="{{ route('add.compte-depense') }}">Ajouter Compte de dépense</a></li> -->
-
-                        <!-- <li><a href="{{ route('all.bene-comptes') }}">Bénéficiaires par comptes</a></li> -->
-                        <!-- <li><a href="{{ route('add.bene-compte') }}">Ajouter Bénéficiaire par compte</a></li> -->
-                       
-                        
+                        <li><a href="{{ route('all.compte-effets') }}">Compte de dépenses</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-cog"></i>
+                        <span>Courtiers</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('all.courtiers') }}">Courtiers</a></li>
+                        <li><a href="{{ route('add.courtier') }}">Ajouter Courtier</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-cog"></i>
+                        <span>Services</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                    <li><a href="{{ route('all.services') }}">Services</a></li>
+                        <li><a href="{{ route('add.service') }}">Ajouter Service</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-cog"></i>
+                        <span>Banques</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                    <li><a href="{{ route('all.banks') }}">Banques</a></li>
+                        <li><a href="{{ route('add.bank') }}">Ajouter Banque</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-cog"></i>
+                        <span>Compagnies</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                    <li><a href="{{ route('all.compagnies') }}">Compagnies</a></li>
+                        <li><a href="{{ route('add.compagnie') }}">Ajouter compagnie</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-cog"></i>
+                        <span>Compagnies</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                    <li><a href="{{ route('all.sous-comptes') }}">Sous comptes</a></li>
+                        <li><a href="{{ route('add.sous-compte') }}">Ajouter Sous compte</a></li>
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-cog"></i>
+                        <span>Bénéficiaires</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                    <li><a href="{{ route('all.bene-comptes') }}">Bénéficiaires</a></li>
+                        <li><a href="{{ route('add.bene-compte') }}">Ajouter Bénéficiaire</a></li>
                     </ul>
                 </li>
                 <!-- <li class="submenu">
@@ -241,7 +292,7 @@
                         <li><a href="{{ route('add.bene-compte') }}">Ajouter Bénéficiaire par compte</a></li>
                     </ul>
                 </li> -->
-                
+
                 @endif
             </ul>
         </div>

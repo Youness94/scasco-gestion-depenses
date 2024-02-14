@@ -33,7 +33,7 @@ class CarnetEffetController extends Controller
 {
     if (auth()->check()) {
     $validatedData = $request->validate([
-        'reception_date' => 'required|date_format:Y-m-d', // Update the date format
+        'reception_date' => 'required|date_format:Y-m-d', 
         'bank_id' => 'required|exists:banks,id',
         'effet_sie' => 'required|string',
         'effet_start_number' => 'required|integer',

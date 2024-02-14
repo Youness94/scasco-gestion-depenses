@@ -21,10 +21,8 @@ return new class extends Migration
             $table->timestamps();
         });
         DB::table('effet_comptes')->insert([
-            ['nom' => 'Règlement sinistres automobiles', 'user_id' => 1],
-            ['nom' => 'Règlement sinistres RDP', 'user_id' => 1],
             ['nom' => 'Règlement fournisseurs', 'user_id' => 1],
-            ['nom' => 'Règlement clients - Ristournes', 'user_id' => 1],
+            ['nom' => 'Règlement Cies', 'user_id' => 1],
         ]);
     }
 

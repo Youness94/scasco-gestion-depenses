@@ -13,11 +13,10 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('bene_comptes', function (Blueprint $table) {
+        Schema::create('reglement_effet_images', function (Blueprint $table) {
             $table->id();
-            $table->string('nom');
-            // $table->foreignId('compte_depense_id')->constrained('compte_depenses')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users');
+            $table->string('images');
+            $table->foreignId('reglement_effet_id')->constrained('reglement_effets')->onDelete('cascade');
             $table->timestamps();
         });
     }
@@ -29,6 +28,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('bene_comptes');
+        Schema::dropIfExists('reglement_effet_images');
     }
 };

@@ -11,7 +11,8 @@ class BeneCompteController extends Controller
 {
     public function AllBeneComptes()
     {
-        $bene_comptes = BeneCompte::with('compte_depense')->orderBy('created_at', 'desc')->get();
+        // $bene_comptes = BeneCompte::with('compte_depense')->orderBy('created_at', 'desc')->get();
+        $bene_comptes = BeneCompte::orderBy('created_at', 'desc')->get();
         return view('bene_comptes.list-bene-compte', compact('bene_comptes')); //
     }
 
@@ -19,8 +20,8 @@ class BeneCompteController extends Controller
     {
         if (auth()->check()) {
         $bene_comptes = BeneCompte::latest()->get(); 
-        $compte_depenses = CompteDepense::all();
-        return view('bene_comptes.add-bene-compte', compact('bene_comptes', 'compte_depenses'));
+        // $compte_depenses = CompteDepense::all();
+        return view('bene_comptes.add-bene-compte', compact('bene_comptes'));
         // return view('backend.clients.add_client');
     } else {
         // User is not authenticated, redirect to the login page
@@ -34,15 +35,13 @@ class BeneCompteController extends Controller
         // Validate the incoming request data
         $request->validate([
             'nom' => 'required|string|max:100',
-            'compte_depense_id' => 'required|exists:compte_depenses,id',
+            // 'compte_depense_id' => 'required|exists:compte_depenses,id',
         ]);
 
-        // Create the BeneCompte with the authenticated user's ID
         $beneCompte = BeneCompte::create([
             'nom' => $request->input('nom'),
-            'compte_depense_id' => $request->input('compte_depense_id'),
-            'user_id' => auth()->id(), // Assuming you are associating the BeneCompte with the currently authenticated user
-            // Add other fields as needed
+            // 'compte_depense_id' => $request->input('compte_depense_id'),
+            'user_id' => auth()->id(), 
         ]);
 
         return redirect('/tous/bene-comptes')->with('success', 'BeneCompte created successfully');
@@ -61,25 +60,23 @@ class BeneCompteController extends Controller
     public function EditBeneCompte($id)
     {
         $bene_comptes = BeneCompte::findOrFail($id);
-        $compte_depenses = CompteDepense::all(); // Assuming you need the list of compte_depenses
-        return view('bene_comptes.edit-bene-compte', compact('bene_comptes', 'compte_depenses'));
+        // $compte_depenses = CompteDepense::all(); 
+        return view('bene_comptes.edit-bene-compte', compact('bene_comptes'));
     }
 
 
     public function UpdateBeneCompte(Request $request, BeneCompte $bene_compte)
     {
 
-        $cbkId = $request->id; // Assuming you're passing the ID through the request
+        $cbkId = $request->id; 
         $bene_compte = BeneCompte::findOrFail($cbkId);
 
         // Update the checkbook record
         $bene_compte->update([
             'nom' => $request->input('nom'),
-            'compte_depense_id' => $request->input('compte_depense_id'),
-            // Add other fields as needed
+            // 'compte_depense_id' => $request->input('compte_depense_id'),
         ]);
 
-        // Update the user ID associated with this checkbook
         $bene_compte->user_id = auth()->user()->id;
         $bene_compte->save();
 

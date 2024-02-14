@@ -32,22 +32,7 @@
                                         <input type="text" class="form-control" name="nom">
                                     </div>
                                 </div>
-                                <div class="col-12 col-sm-6">
-                                    <div class="form-group local-forms">
-                                        <label for="compte_depense_id" class="form-label">Bank: <span class="login-danger">*</span></label>
-                                        <select class="form-control select @error('compte_depense_id') is-invalid @enderror" name="compte_depense_id" id="compte_depense_id">
-                                            <option selected disabled>Sélectionnez une banque</option>
-                                            @foreach ($compte_depenses as $compte_depense)
-                                            <option value="{{ $compte_depense->id }}">{{ $compte_depense->nom }}</option>
-                                            @endforeach
-                                        </select>
-                                        @error('compte_depense_id')
-                                        <span class="invalid-feedback" role="alert">
-                                            <strong>{{ $message }}</strong>
-                                        </span>
-                                        @enderror
-                                    </div>
-                                </div>
+                                
                                 <div class="col-12">
                                     <div class="student-submit">
                                         <button type="submit" class="btn btn-primary">Soumettre</button>

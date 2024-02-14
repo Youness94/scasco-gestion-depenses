@@ -346,6 +346,6 @@ class ReglementChequeController extends Controller
         ];
 
         $pdf = PDF::loadView('pdf.reglement_cheque_pdf', $data);
-        return $pdf->download("reglement_cheque_.pdf");
+        return $pdf->download("reglement_cheque_$date_reglement.pdf");
     }
 }

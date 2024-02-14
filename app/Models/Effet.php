@@ -27,16 +27,16 @@ class Effet extends Model
         return $this->belongsTo(CarnetEffet::class);
     }
 
-    // public function reglementEffet()
+    public function reglementEffet()
+    {
+        return $this->hasOne(ReglementEffet::class, 'effet_id');
+    }
+    // public function effetDebit()
     // {
-    //     return $this->hasOne(ReglementCheque::class, 'effet_id');
+    //     return $this->hasMany(EffetDebit::class, 'check_id');
     // }
-    // public function chequeDebit()
+    // public function effetAnnule()
     // {
-    //     return $this->hasMany(CheckDebit::class, 'check_id');
-    // }
-    // public function chequeAnnule()
-    // {
-    //     return $this->hasMany(CheckAnnule::class, 'check_id');
+    //     return $this->hasMany(EffetAnnule::class, 'check_id');
     // }
 }
