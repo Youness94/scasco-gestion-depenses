@@ -32,7 +32,7 @@ class ReglementChequeController extends Controller
 
     public function AllReglementCheques()
     {
-        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages'])->orderBy('created_at', 'desc')->get();
+        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages', 'reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->orderBy('created_at', 'desc')->get();
         return view('reglement_cheques.list-reglement-cheque', compact('reglements'));
     }
 
@@ -183,7 +183,7 @@ class ReglementChequeController extends Controller
 
     public function ShowReglementCheque($id)
     {
-        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages'])->findOrFail($id);
+        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages','reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);
         return view('reglement_cheques.show-reglement-cheque', compact('reglements'));
     }
     public function EditReglementCheque($id)
@@ -226,8 +226,7 @@ class ReglementChequeController extends Controller
             // Find the existing ReglementCheque record
             $reglementCheque = ReglementCheque::findOrFail($id);
 
-
-            $reglementCheque->update([
+            $updateData = [
                 'date_reglement' => $request->input('date_reglement'),
                 'cheque_id' => $request->input('cheque_id'),
                 'compte_id' => $request->input('compte_id'),
@@ -236,7 +235,9 @@ class ReglementChequeController extends Controller
                 'referance' => $request->input('referance'),
                 'echeance' => $request->input('echeance'),
                 'montant' => $request->input('montant'),
-            ]);
+            ];
+            $reglementCheque->update($updateData);
+
             Log::info('Cheque ID being updated: ' . $request->input('cheque_id'));
             // Log::info('Before deleting existing images');
             if ($request->hasFile('images') && count($request->file('images')) > 0) {
@@ -271,41 +272,114 @@ class ReglementChequeController extends Controller
 
 
             switch ($compteNom) {
-
                 case 'Règlement sinistres automobiles':
+                    $companierId = $request->input('companier_id');
+                    $referanceDossierAuto = $request->input('referance_dossier_auto');
+                    $referanceQuittanceAuto = $request->input('referance_quittance_auto');
 
-                    ReglementSiniAuto::create([
-                        'reglement_cheque_id' => $reglementCheque->id,
-                        'companier_id' => $request->input('companier_id'),
-                        'referance_dossier_auto' => $request->input('referance_dossier_auto'),
-                        'referance_quittance_auto' => $request->input('referance_quittance_auto'),
-                    ]);
+                    // Check if 'companier_id' is not null
+                    if ($companierId !== null) {
+                        // Check if a record already exists
+                        $existingRecord = ReglementSiniAuto::where('companier_id', $companierId)
+                            ->where('referance_dossier_auto', $referanceDossierAuto)
+                            ->where('referance_quittance_auto', $referanceQuittanceAuto)
+                            ->where('reglement_cheque_id', $reglementCheque->id)
+                            ->first();
+
+                        if (!$existingRecord) {
+                            // Create a new record only if it doesn't exist
+                            ReglementSiniAuto::create([
+                                'reglement_cheque_id' => $reglementCheque->id,
+                                'companier_id' => $companierId,
+                                'referance_dossier_auto' => $referanceDossierAuto,
+                                'referance_quittance_auto' => $referanceQuittanceAuto,
+                            ]);
+                        } else {
+                            // Record already exists, you can keep the last one (no action needed)
+                        }
+                    } else {
+                        // Handle the case where 'companier_id' is null
+                        Log::error("companier_id is null. Cannot create a new record in 'Règlement sinistres automobiles'.");
+                    }
                     break;
 
                 case 'Règlement sinistres RDP':
-                    ReglementSiniRdp::create([
-                        'reglement_cheque_id' => $reglementCheque->id,
-                        'companier_id' => $request->input('companier_id'),
-                        'referance_dossier' => $request->input('referance_dossier'),
-                        'referance_quittance' => $request->input('referance_quittance'),
-                    ]);
-                    break;
-                case 'Règlement fournisseurs':
-                    ReglementFournisseur::create([
-                        'sous_compte_id' => $request->input('sous_compte_id'),
-                        'reglement_cheque_id' => $reglementCheque->id,
-                    ]);
-                    break;
-                case 'Règlement clients - Ristournes':
-                    ReglementCltRistourn::create([
-                        'reglement_cheque_id' => $reglementCheque->id,
-                        'companier_id' => $request->input('companier_id'),
-                        'referance_diam' => $request->input('referance_diam'),
-                        'referance_cie' => $request->input('referance_cie'),
-                    ]);
-                    break;
-                default:
+                    $companierIdRDP = $request->input('companier_id');
+                    $referanceDossierRDP = $request->input('referance_dossier');
+                    $referanceQuittanceRDP = $request->input('referance_quittance');
 
+                    if ($companierIdRDP !== null) {
+                        $existingRecordRDP = ReglementSiniRdp::where('companier_id', $companierIdRDP)
+                            ->where('referance_dossier', $referanceDossierRDP)
+                            ->where('referance_quittance', $referanceQuittanceRDP)
+                            ->where('reglement_cheque_id', $reglementCheque->id)
+                            ->first();
+
+                        if (!$existingRecordRDP) {
+                            ReglementSiniRdp::create([
+                                'reglement_cheque_id' => $reglementCheque->id,
+                                'companier_id' => $companierIdRDP,
+                                'referance_dossier' => $referanceDossierRDP,
+                                'referance_quittance' => $referanceQuittanceRDP,
+                            ]);
+                        } else {
+                        }
+                    } else {
+                        Log::error("companier_id is null. Cannot create a new record in 'Règlement sinistres RDP'.");
+                    }
+                    break;
+
+                case 'Règlement fournisseurs':
+                    $sousCompteId = $request->input('sous_compte_id');
+
+                    if ($sousCompteId !== null) {
+                        $existingRecordFournisseurs = ReglementFournisseur::where('sous_compte_id', $sousCompteId)
+                            ->where('reglement_cheque_id', $reglementCheque->id)
+                            ->first();
+
+                        if (!$existingRecordFournisseurs) {
+                            ReglementFournisseur::create([
+                                'sous_compte_id' => $sousCompteId,
+                                'reglement_cheque_id' => $reglementCheque->id,
+                            ]);
+                        } else {
+                        }
+                    } else {
+                        Log::error("sous_compte_id is null. Cannot create a new record in 'Règlement fournisseurs'.");
+                    }
+                    break;
+
+                case 'Règlement clients - Ristournes':
+                    $companierIdRistournes = $request->input('companier_id');
+                    $referanceDiam = $request->input('referance_diam');
+                    $referanceCie = $request->input('referance_cie');
+                    if ($companierIdRistournes !== null) {
+                        $existingRecordRistournes = ReglementCltRistourn::where('companier_id', $companierIdRistournes)
+                            ->where('referance_diam', $referanceDiam)
+                            ->where('referance_cie', $referanceCie)
+                            ->where('reglement_cheque_id', $reglementCheque->id)
+                            ->first();
+
+                        if (!$existingRecordRistournes) {
+                            ReglementCltRistourn::create([
+                                'reglement_cheque_id' => $reglementCheque->id,
+                                'companier_id' => $companierIdRistournes,
+                                'referance_diam' => $referanceDiam,
+                                'referance_cie' => $referanceCie,
+                            ]);
+                        } else {
+                        }
+                    } else {
+                        Log::error("companier_id is null. Cannot create a new record in 'Règlement clients - Ristournes'.");
+                    }
+                    break;
+
+                default:
+                    // Remove the record from the respective table if it exists
+                    ReglementSiniAuto::where('reglement_cheque_id', $reglementCheque->id)->delete();
+                    ReglementSiniRdp::where('reglement_cheque_id', $reglementCheque->id)->delete();
+                    ReglementFournisseur::where('reglement_cheque_id', $reglementCheque->id)->delete();
+                    ReglementCltRistourn::where('reglement_cheque_id', $reglementCheque->id)->delete();
                     break;
             }
 
@@ -319,9 +393,11 @@ class ReglementChequeController extends Controller
             return redirect()->back()->with('error', 'Error');
         }
     }
+
+    
     public function generateReglementChequePDF($id)
     {
-        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages'])->findOrFail($id);
+        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages','reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);
         $date_reglement = $reglements->date_reglement;
         $cheque = $reglements->cheque->number;
         $compte = $reglements->compte->nom;
@@ -332,7 +408,7 @@ class ReglementChequeController extends Controller
         $montant =    $reglements->montant;
 
         $data = [
-            'title'=> $date_reglement,
+            'title' => $date_reglement,
             'date' => date('m/d/Y'),
             // 'date_reglement' =>  $date_reglement,
             // 'cheque' => $cheque ,

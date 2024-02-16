@@ -23,4 +23,9 @@ class BeneCompte extends Model
     {
         return $this->hasMany(ReglementCheque::class, 'benefiiaire_id');
     }
+
+    public function reglementEffets()
+    {
+        return $this->hasMany(ReglementEffet::class, 'benefiiaire_id');
+    }
 }

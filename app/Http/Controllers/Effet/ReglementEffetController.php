@@ -21,7 +21,7 @@ class ReglementEffetController extends Controller
 {
     public function AllReglementEffets()
     {
-        $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelEffetImages'])->orderBy('created_at', 'desc')->get();
+        $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelEffetImages', 'reglementEffetFournisseur'])->orderBy('created_at', 'desc')->get();
         return view('reglement_effets.list-reglement-effets', compact('reglements'));
     }
 
@@ -30,8 +30,8 @@ class ReglementEffetController extends Controller
 
         // $effets = Effet::all();
         $effets = Effet::doesntHave('reglementEffet')
-            // ->doesntHave('effetDebit')
-            // ->doesntHave('effetAnnule')
+            ->doesntHave('effetDebit')
+            ->doesntHave('effetAnnule')
             ->get();
         $services = Service::all();
         $benefiiaires = BeneCompte::all();
@@ -85,7 +85,7 @@ class ReglementEffetController extends Controller
 
             $reglementEffet = ReglementEffet::create([
                 'date_reglement' => $request->input('date_reglement'),
-                'cheque_id' => $request->input('cheque_id'),
+                'effet_id' => $request->input('effet_id'),
                 'effet_compte_id' => $request->input('effet_compte_id'),
                 'benefiiaire_id' => $request->input('benefiiaire_id'),
                 'service_id' => $request->input('service_id'),
@@ -155,7 +155,7 @@ class ReglementEffetController extends Controller
 
     public function ShowReglementEffet($id)
     {
-        $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelChequeEffetImages'])->findOrFail($id);
+        $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelChequeEffetImages', 'reglementEffetFournisseur'])->findOrFail($id);
         return view('reglement_effets.show-reglement-effet', compact('reglements'));
     }
     public function EditReglementEffet($id)
@@ -169,9 +169,9 @@ class ReglementEffetController extends Controller
         $effet_comptes = EffetCompte::all();
         $compagnies = Compagnie::all();
         $sous_comptes = SousCompte::all();
-        $reglement_cheques = ReglementEffet::findOrFail($id);
+        $reglement_effets = ReglementEffet::findOrFail($id);
 
-        return view('reglement_effets.edit-reglement-effet', compact('reglement_cheques', 'benefiiaires', 'services', 'checks', 'effet_comptes', 'compagnies', 'sous_comptes'));
+        return view('reglement_effets.edit-reglement-effet', compact('reglement_effets', 'benefiiaires', 'services', 'effets', 'effet_comptes', 'compagnies', 'sous_comptes'));
     }
 
     public function UpdateReglementEffet(Request $request, $id)
@@ -190,29 +190,29 @@ class ReglementEffetController extends Controller
                 'exists:effets,id',
             ],
         ]);
-        Log::info('ID being ignored in unique check: ' . $id);
+        Log::info('ID being ignored in unique effet: ' . $id);
 
         DB::beginTransaction();
 
         try {
-            // Find the existing ReglementCheque record
             $reglementEffet = ReglementEffet::findOrFail($id);
 
-
-            $reglementEffet->update([
+            $updateData = [
                 'date_reglement' => $request->input('date_reglement'),
-                'cheque_id' => $request->input('cheque_id'),
+                'effet_id' => $request->input('effet_id'),
                 'effet_compte_id' => $request->input('effet_compte_id'),
                 'benefiiaire_id' => $request->input('benefiiaire_id'),
                 'service_id' => $request->input('service_id'),
                 'referance' => $request->input('referance'),
                 'echeance' => $request->input('echeance'),
                 'montant' => $request->input('montant'),
-            ]);
-            Log::info('Cheque ID being updated: ' . $request->input('effet_id'));
+            ];
+
+            $reglementEffet->update($updateData);
+            // Log::info('Cheque ID being updated: ' . $request->input('effet_id'));
             // Log::info('Before deleting existing images');
             if ($request->hasFile('images') && count($request->file('images')) > 0) {
-                $reglementEffet->RelChequeEffetImages()->delete();
+                $reglementEffet->RelEffetImages()->delete();
             }
             // Log::info('After deleting existing images');
 
@@ -231,30 +231,49 @@ class ReglementEffetController extends Controller
                     ]);
                 }
             }
-            // Log::info('After uploading new images');
+            Log::info('After uploading new images');
 
 
 
-            $compteId = $request->input('compte_id');
+            $compteId = $request->input('effet_compte_id');
 
             $effet_compte = EffetCompte::find($compteId);
 
             $compteNom = trim($effet_compte->nom);
+            Log::info($compteNom);
 
 
             switch ($compteNom) {
-
                 case 'Règlement fournisseurs':
-                    ReglementEffetFournisseur::create([
-                        'sous_compte_id' => $request->input('sous_compte_id'),
-                        'reglement_effet_id' => $reglementEffet->id,
-                    ]);
+                    $sousCompteId = $request->input('sous_compte_id');
+            
+                    // Check if 'sous_compte_id' is not null
+                    if ($sousCompteId !== null) {
+                        // Check if a record already exists
+                        $existingRecord = ReglementEffetFournisseur::where('sous_compte_id', $sousCompteId)
+                            ->where('reglement_effet_id', $reglementEffet->id)
+                            ->first();
+            
+                        if (!$existingRecord) {
+                            // Create a new record only if it doesn't exist
+                            ReglementEffetFournisseur::create([
+                                'sous_compte_id' => $sousCompteId,
+                                'reglement_effet_id' => $reglementEffet->id,
+                            ]);
+                        } else {
+                            // Record already exists, you can keep the last one (no action needed)
+                        }
+                    } else {
+                        // Handle the case where 'sous_compte_id' is null
+                        Log::error("sous_compte_id is null. Cannot create a new record.");
+                    }
                     break;
+            
                 default:
-
+                    // Remove the record from ReglementEffetFournisseur if it exists
+                    ReglementEffetFournisseur::where('reglement_effet_id', $reglementEffet->id)->delete();
                     break;
             }
-
             DB::commit();
 
             return redirect()->route('all.reglement-effets')->with('success', "Régelement a été mis à jour avec succès");
@@ -267,7 +286,7 @@ class ReglementEffetController extends Controller
     }
     public function generateReglementEffetPDF($id)
     {
-        $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelChequeEffetImages'])->findOrFail($id);
+        $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelEffetImages', 'reglementEffetFournisseur'])->findOrFail($id);
         $date_reglement = $reglements->date_reglement;
         $cheque = $reglements->cheque->number;
         $compte = $reglements->effet_compte->nom;

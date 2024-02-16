@@ -31,12 +31,13 @@ class Effet extends Model
     {
         return $this->hasOne(ReglementEffet::class, 'effet_id');
     }
-    // public function effetDebit()
-    // {
-    //     return $this->hasMany(EffetDebit::class, 'check_id');
-    // }
-    // public function effetAnnule()
-    // {
-    //     return $this->hasMany(EffetAnnule::class, 'check_id');
-    // }
+    public function effetDebit()
+    {
+        return $this->hasMany(EffetDebit::class);
+    }
+
+    public function effetAnnule()
+    {
+        return $this->hasMany(EffetAnnule::class);
+    }
 }

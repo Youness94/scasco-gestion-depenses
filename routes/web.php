@@ -23,12 +23,15 @@ use App\Http\Controllers\CompteDepenseController;
 use App\Http\Controllers\CourtierController;
 use App\Http\Controllers\Effet\CarnetEffetController;
 use App\Http\Controllers\Effet\EffetAffectationController;
+use App\Http\Controllers\Effet\EffetAnnuleController;
 use App\Http\Controllers\Effet\EffetServiceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\ReglementChequeController;
 use App\Http\Controllers\ServiceController;
 use App\Http\Controllers\SousCompteController;
 use App\Http\Controllers\Effet\EffetCompteController;
+use App\Http\Controllers\Effet\EffetController;
+use App\Http\Controllers\Effet\EffetDebitController;
 use App\Http\Controllers\Effet\ReglementEffetController;
 use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
@@ -176,11 +179,33 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         
         Route::get('/download-reglement-effet-pdf/{id}', 'generateReglementEffetPDF')->name('download.reglement.effet.pdf');
 
-        Route::get('/checkIfEffetSelected', 'checkIfEffetSelected')->name('checkIfEffetSelected');
+        // Route::get('/checkIfEffetSelected', 'checkIfEffetSelected')->name('checkIfEffetSelected');
+    });
+
+    Route::controller(EffetAnnuleController::class)->group(function () {
+        Route::get('/all/effets-cancelled', 'all_effets_annule')->name('all.effets-cancelled');
+        Route::get('/add/effet-cancelled', 'addEffetAnnule')->name('add.effet-cancelled');
+        Route::post('/store/effet-cancelled', 'store_effets_annule')->name('store.effet-cancelled');
+        Route::get('/edit/effet-cancelled/{id}', 'edit_effets_annule')->name('edit.effet-cancelled');
+        Route::post('/update/effet-cancelled/{id}', 'update_effets_annule')->name('update.effet-cancelled');
+        Route::get('/show/effet-cancelled/{id}', 'show_effets_annule')->name('show.effet-cancelled');
+    });
+
+    Route::controller(EffetDebitController::class)->group(function () {
+        Route::get('/all/effets-debit', 'all_effets_debit')->name('all.effets-debit');
+        Route::get('/add/effet-debit', 'add_effets_debit')->name('add.effet-debit');
+        Route::post('/store/effet-debit', 'store_effets_debit')->name('store.effet-debit');
+        Route::get('/edit/effet-debit/{id}', 'edit_effets_debit')->name('edit.effet-debit');
+        Route::post('/update/effet-debit/{id}', 'update_effet_debit')->name('update.effet-debit');
+        Route::get('/show/effet-debit/{id}', 'show_effet_debit')->name('show.effet-debit');
     });
 
 
-
+    Route::controller(EffetController::class)->group(function () {
+        Route::post('/add/fillEffets/{id}', 'FillEffets')->name('add.fillEffets');
+        Route::get('/all/Effets-non-consommes', 'get_effet_non_consommes')->name('all.effets-non-consommes');
+        // Route::get('/add/effet-cancelled', 'add_effets_annule')->name('add.effet-cancelled');
+    });
 
     // ============ Chéquier Routes =========== // 
 
@@ -208,6 +233,7 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         Route::post('/store/check-cancelled', 'store_cheques_annule')->name('store.check-cancelled');
         Route::get('/edit/check-cancelled/{id}', 'edit_cheques_annule')->name('edit.check-cancelled');
         Route::post('/update/check-cancelled/{id}', 'update_cheques_annule')->name('update.check-cancelled');
+        Route::get('/show/check-cancelled/{id}', 'show_cheque_annule')->name('show.check-cancelled');
     });
 
     Route::controller(CheckDebitController::class)->group(function () {

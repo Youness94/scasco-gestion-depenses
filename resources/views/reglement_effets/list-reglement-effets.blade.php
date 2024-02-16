@@ -53,10 +53,11 @@
                                     <tr>
                                         <th scope="col">#</th>
                                         <th scope="col">Date de règlement</th>
-                                        <th scope="col">N de chèque</th>
+                                        <th scope="col">N de effet</th>
                                         <th scope="col">Compte</th>
                                         <th scope="col">Bénéficiaire</th>
                                         <th scope="col">Service</th>
+                                        <th scope="col">Sous Compte</th>
                                         <th scope="col">Référence</th>
                                         <th scope="col">Échéance</th>
                                         <th scope="col">Montant</th>
@@ -70,17 +71,22 @@
                                     <tr>
                                         <td>{{ $reglement->id }}</td>
                                         <td>{{ $reglement->date_reglement }}</td>
-                                        <td>{{ $reglement->cheque->number }}</td>
-                                        <td>{{ $reglement->compte->nom }}</td>
+                                        <td>{{ $reglement->effet->effet_number }}</td>
+                                        <td>{{ $reglement->effet_compte->nom }}</td>
                                         <td>{{ $reglement->bene->nom }}</td>
                                         <td>{{ $reglement->service->nom }}</td>
+                                        <td>
+                                            @foreach ($reglement->reglementEffetFournisseur as $reglementFournisseur)
+                                            {{ $reglementFournisseur->sousCompte->nom ?? 'N/V'}}
+                                            @endforeach
+                                        </td>
                                         <td>{{ $reglement->referance }}</td>
                                         <td>{{ $reglement->echeance }}</td>
                                         <td>{{ number_format(($reglement->montant ?? 0.00),2)}}</td>
-                                        
+
                                         <td>
-                                            @if ($reglement->RelChequeImages->isNotEmpty())
-                                            <img src="{{ asset('public/reglement_cheque_images/' . $reglement->RelChequeImages[0]->images) }}" alt="Image" style="width: 50px; height: 50px; border: 1px solid #3498db; border-radius:50%;">
+                                            @if ($reglement->RelEffetImages->isNotEmpty())
+                                            <img src="{{ asset('public/reglement_effet_images/' . $reglement->RelEffetImages[0]->images) }}" alt="Image" style="width: 50px; height: 50px; border: 1px solid #3498db; border-radius:50%;">
                                             @else
                                             Aucune image disponible
                                             @endif
@@ -97,15 +103,15 @@
                                         <td class="text-end">
                                             <div class="actions">
                                                 @if (Session::get('role_name') === 'Super Admin')
-                                                <a href="{{route('edit.reglement-cheque',$reglement->id)}}" class="btn btn-sm bg-danger-light">
+                                                <a href="{{route('edit.reglement-effet',$reglement->id)}}" class="btn btn-sm bg-danger-light">
                                                     <i class="feather-edit"></i>
                                                 </a>
                                                 <!-- @endif
                                                 @if (Session::get('role_name') === 'Super Admin') -->
-                                                <a href="{{route('show.reglement-cheque',$reglement->id)}}" class="btn btn-sm bg-danger-light">
+                                                <a href="{{route('show.reglement-effet',$reglement->id)}}" class="btn btn-sm bg-danger-light">
                                                     <i class="feather-eye"></i>
                                                 </a>
-                                                <a href="{{ route('download.reglement.pdf', ['id' => $reglement->id]) }}" class="btn btn-sm bg-danger-light">
+                                                <a href="{{ route('download.reglement.effet.pdf', ['id' => $reglement->id]) }}" class="btn btn-sm bg-danger-light">
                                                     <i class="fas fa-download"></i>
                                                 </a>
                                                 @endif
@@ -130,47 +136,3 @@
 
 </div>
 @endsection
-
-
-<!-- <table class="table">
-    <thead>
-        <tr>
-            <th scope="col">ID</th>
-            <th scope="col">Date de règlement</th>
-            <th scope="col">N de chèque</th>
-            <th scope="col">Compte</th>
-            <th scope="col">Bénéficiaire</th>
-            <th scope="col">Service</th>
-            <th scope="col">Référence</th>
-            <th scope="col">Échéance</th>
-            <th scope="col">Montant</th>
-            <th scope="col">Justification</th>
-        </tr>
-    </thead>
-    <tbody>
-        @forelse ($reglements as $reglement)
-        <tr>
-            <td>{{ $reglement->id }}</td>
-            <td>{{ $reglement->date_reglement }}</td>
-            <td>{{ $reglement->cheque->number }}</td>
-            <td>{{ $reglement->compte->nom }}</td>
-            <td>{{ $reglement->bene->nom }}</td>
-            <td>{{ $reglement->service->nom }}</td>
-            <td>{{ $reglement->referance }}</td>
-            <td>{{ $reglement->echeance }}</td>
-            <td>{{ $reglement->montant }}</td>
-            <td>
-                @if ($reglement->RelChequeImages->isNotEmpty())
-                    <img src="{{ asset('public/reglement_cheque_images/' . $reglement->RelChequeImages[0]->images) }}" alt="Image" style="width: 50px; height: 50px; border: 1px solid #3498db; border-radius:50%;">
-                @else
-                    Aucune image disponible
-                @endif
-            </td>
-        </tr>
-        @empty
-        <tr>
-            <td colspan="10">Aucun chèque de règlement trouvé.</td>
-        </tr>
-        @endforelse
-    </tbody>
-</table> -->

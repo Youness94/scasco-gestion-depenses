@@ -123,7 +123,7 @@
                                 <div class="col-12 col-sm-4">
                                     <div class="form-group local-forms">
                                         <label for="montant">Montant:</label>
-                                        <input type="number" class="form-control" id="montant" name="montant" value="{{$reglement_cheques->montant}}" required>
+                                        <input type="number" class="form-control" id="montant" name="montant" value="{{$reglement_cheques->montant}}" step="0.01" required>
                                     </div>
                                 </div>
                                 <!--  -->

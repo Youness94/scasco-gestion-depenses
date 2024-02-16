@@ -8,10 +8,10 @@
             <div class="page-header">
                   <div class="row align-items-center">
                         <div class="col">
-                              <h3 class="page-title">Les Chéques annulés</h3>
+                              <h3 class="page-title">Les Effets annulés</h3>
                               <ul class="breadcrumb">
                                     <li class="breadcrumb-item"><a href="{{ route('accueil') }}">Tableau de Bord</a></li>
-                                    <li class="breadcrumb-item active">Les Chéques annulés</li>
+                                    <li class="breadcrumb-item active">Les Effets annulés</li>
                               </ul>
                         </div>
                   </div>
@@ -36,7 +36,7 @@
                                     <div class="page-header">
                                           <div class="row align-items-center">
                                                 <div class="col">
-                                                      <h3 class="page-title">Les Chéques annulés</h3>
+                                                      <h3 class="page-title">Les Effets annulés</h3>
                                                 </div>
                                                 <div class="col-auto text-end float-end ms-auto download-grp">
                                                       <!-- <a href="#" class="btn btn-primary"><i class="fas fa-plus"></i></a> -->
@@ -61,20 +61,20 @@
                                                       </tr>
                                                 </thead>
                                                 <tbody>
-                                                      @foreach ($checks as $key => $item)
+                                                      @foreach ($effets as $key => $item)
                                                       <tr>
                                                             <td>{{ $key + 1 }}</td>
-                                                            <td>{{ $item->cheque_sie_annule }}{{ $item->check->number }}</td>
-                                                            <td>{{ $item->series_checkbook_annule }}</td>
+                                                            <td>{{ $item->effet_sie_annule }}{{ $item->effet->effet_number }}</td>
+                                                            <td>{{ $item->series_effet_annule }}</td>
                                                             <td>{{ $item->compte->nom}}</td>
                                                             <td>{{ $item->service->nom }}</td>
                                                             <td>{{ $item->benef->nom}}</td>
                                                             <td>{{ $item->montant_annule}}</td>
-                                                            <td>{{ $item->bank_check_annule }}</td>
+                                                            <td>{{ $item->bank_effet_annule }}</td>
                                                             <td>
-                                                                  @if ($item->ChequeAnnuleImages->isNotEmpty())
-                                                                  @foreach ($item->ChequeAnnuleImages as $image)
-                                                                  <img src="{{ asset('public/photos/cheques_annule/' . $image->images) }}" alt="Image" style="width: 50px; height: 50px; border: 1px solid #3498db; border-radius:50%;">
+                                                                  @if ($item->EffetAnnuleImages->isNotEmpty())
+                                                                  @foreach ($item->EffetAnnuleImages as $image)
+                                                                  <img src="{{ asset('public/photos/effets_annule/' . $image->images) }}" alt="Image" style="width: 50px; height: 50px; border: 1px solid #3498db; border-radius:50%;">
                                                                   @endforeach
                                                                   @else
                                                                   Aucune image disponible
@@ -83,7 +83,7 @@
                                                             <td class="text-end">
                                                                   <div class="actions">
                                                                         @if (Session::get('role_name') === 'Super Admin')
-                                                                        <a href="{{route('edit.check-cancelled',$item->id)}}" class="btn btn-sm bg-danger-light">
+                                                                        <a href="{{route('edit.effet-cancelled',$item->id)}}" class="btn btn-sm bg-danger-light">
                                                                               <i class="feather-edit"></i>
                                                                         </a>
                                                                         @endif
@@ -92,7 +92,7 @@
                                                             <td class="text-end">
                                                                   <div class="actions">
                                                                         @if (Session::get('role_name') === 'Super Admin')
-                                                                        <a href="{{route('show.check-debit',$item->id)}}" class="btn btn-sm bg-danger-light">
+                                                                        <a href="{{route('show.effet-cancelled',$item->id)}}" class="btn btn-sm bg-danger-light">
                                                                               <i class="feather-eye"></i>
                                                                         </a>
                                                                         @endif

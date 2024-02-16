@@ -100,6 +100,29 @@
 
                     </ul>
                 </li>
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-clipboard"></i>
+                        <span>Effets Debits</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('all.effets-debit') }}">Effets Debits</a></li>
+                        <li><a href="{{ route('add.effet-debit') }}">Ajouter effet debit</a></li>
+
+                    </ul>
+                </li>
+                <li class="submenu">
+                    <a href="#"><i class="fas fa-clipboard"></i>
+                        <span>Effets Annulés</span>
+                        <span class="menu-arrow"></span>
+                    </a>
+                    <ul>
+                        <li><a href="{{ route('all.effets-cancelled') }}">Effets Annulés</a></li>
+                        <li><a href="{{ route('add.effet-cancelled') }}">Ajouter effet annulé</a></li>
+
+                    </ul>
+                </li>
+               
                 @if (Session::get('role_name') === 'Super Admin')
 
                 <li class="menu-title">

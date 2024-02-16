@@ -9,7 +9,7 @@
                         <div class="col">
                               <h3 class="page-title">Ajouter Chèque Annulé</h3>
                               <ul class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="{{route('all.checks-non-consommes')}}">Chèquiers</a></li>
+                                    <li class="breadcrumb-item"><a href="{{route('all.effets-non-consommes')}}">Chèquiers</a></li>
                                     <li class="breadcrumb-item active">Ajouter Chèque Annulé</li>
                               </ul>
                         </div>
@@ -30,26 +30,26 @@
                   <div class="col-sm-12">
                         <div class="card">
                               <div class="card-body">
-                              <form method="POST" action="{{ route('update.check-cancelled', ['id' => $check_annules->id]) }}" class="forms-sample" enctype="multipart/form-data">
+                              <form method="POST" action="{{ route('update.effet-cancelled', ['id' => $effet_annules->id]) }}" class="forms-sample" enctype="multipart/form-data">
                                           @csrf
                                           <div class="row">
                                                 <div class="col-12">
-                                                      <h5 class="form-title"><span>Détails du Chèque Annulé</span></h5>
+                                                      <h5 class="form-title"><span>Détails du Effet Annulé</span></h5>
                                                 </div>
 
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
-                                                            <label for="check_id" class="form-label">Numéro du Chèque:
+                                                            <label for="effet_id" class="form-label">Numéro du Effet:
                                                                   <span class="login-danger">*</span></label>
-                                                            <select class="form-control select @error('check_id') is-invalid @enderror" name="check_id[]" id="check_id" onchange="updateFields()">
-                                                                  <option selected disabled>Sélectionnez un cheque</option>
-                                                                  @foreach ($checks as $check)
-                                                                  <option value="{{ $check->id }}" {{ $check->id == $check_annules -> check_id ? 'selected' : '' }} data-cheque_sie="{{ old('check_id.' . $loop->index . '.cheque_sie', $check->checkbook->cheque_sie) }}" data-banque="{{ old('check_id.' . $loop->index . '.banque', $check->checkbook->bank->nom) }}" data-series="{{ old('check_id.' . $loop->index . '.series', $check->checkbook->series) }}" {{ in_array($check->id, old('check_id', [])) ? 'selected' : '' }}>
-                                                                        {{ $check->number }}
+                                                            <select class="form-control select @error('effet_id') is-invalid @enderror" name="effet_id[]" id="effet_id" onchange="updateFields()">
+                                                                  <option selected disabled>Sélectionnez un effet</option>
+                                                                  @foreach ($effets as $effet)
+                                                                  <option value="{{ $effet->id }}" {{ $effet->id == $effet_annules -> effet_id ? 'selected' : '' }} data-effet_sie="{{ old('effet_id.' . $loop->index . '.effet_sie', $effet->carnet_effet->effet_sie) }}" data-banque="{{ old('effet_id.' . $loop->index . '.banque', $effet->carnet_effet->bank->nom) }}" data-series="{{ old('effet_id.' . $loop->index . '.carnet_series', $effet->carnet_effet->carnet_series) }}" {{ in_array($effet->id, old('effet_id', [])) ? 'selected' : '' }}>
+                                                                        {{ $effet->effet_number }}
                                                                   </option>
                                                                   @endforeach
                                                             </select>
-                                                            @error('check_id.0') {{-- Use 'check_id.0' because it's an array --}}
+                                                            @error('effet_id.0') {{-- Use 'effet_id.0' because it's an array --}}
                                                             <span class="invalid-feedback" role="alert">
                                                                   <strong>{{ $message }}</strong>
                                                             </span>
@@ -58,20 +58,20 @@
                                                 </div>
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
-                                                            <label for="cheque_sie_annule" class="form-label">Cheque SIE:</label>
-                                                            <input type="text" class="form-control" id="cheque_sie_annule" name="cheque_sie_annule" value="{{ old('cheque_sie_annule', $check_annules->cheque_sie_annule) }}" readonly>
+                                                            <label for="effet_sie_annule" class="form-label">Effet SIE:</label>
+                                                            <input type="text" class="form-control" id="effet_sie_annule" name="effet_sie_annule" value="{{ old('effet_sie_annule', $effet_annules->effet_sie_annule) }}" readonly>
                                                       </div>
                                                 </div>
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
-                                                            <label for="series_checkbook_annule" class="form-label">Checkbook Series:</label>
-                                                            <input type="text" class="form-control" id="series_checkbook_annule" name="series_checkbook_annule" value="{{ old('series_checkbook_annule', $check_annules->series_checkbook_annule) }}" readonly>
+                                                            <label for="series_effet_annule" class="form-label">Carnet Series:</label>
+                                                            <input type="text" class="form-control" id="series_effet_annule" name="series_effet_annule" value="{{ old('series_effet_annule', $effet_annules->series_effet_annule) }}" readonly>
                                                       </div>
                                                 </div>
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
-                                                            <label for="bank_check_annule" class="form-label">Banque:</label>
-                                                            <input type="text" class="form-control" id="bank_check_annule" name="bank_check_annule" value="{{ old('bank_check_annule', $check_annules->bank_check_annule) }}" readonly>
+                                                            <label for="bank_effet_annule" class="form-label">Banque:</label>
+                                                            <input type="text" class="form-control" id="bank_effet_annule" name="bank_effet_annule" value="{{ old('bank_effet_annule', $effet_annules->bank_effet_annule) }}" readonly>
                                                       </div>
                                                 </div>
                                                 <div class="col-12 col-sm-4">
@@ -80,7 +80,7 @@
                                                             <select class="form-control select @error('benefiiaire_id') is-invalid @enderror" name="benefiiaire_id" id="benefiiaire_id">
                                                                   <option selected disabled>Sélectionnez un bénéficiaire</option>
                                                                   @foreach ($beneficiares as $beneficiaire)
-                                                                  <option value="{{ $beneficiaire->id }}" {{ $beneficiaire->id == $check_annules -> benefiiaire_id ? 'selected' : '' }}>
+                                                                  <option value="{{ $beneficiaire->id }}" {{ $beneficiaire->id == $effet_annules -> benefiiaire_id ? 'selected' : '' }}>
                                                                         {{ $beneficiaire->nom }}
                                                                   </option>
                                                                   @endforeach
@@ -95,14 +95,14 @@
 
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
-                                                            <label for="compte_id" class="form-label">Compte: <span class="login-danger">*</span></label>
-                                                            <select class="form-control select @error('compte_id') is-invalid @enderror" name="compte_id" id="compte_id">
-                                                                  <option selected disabled>Sélectionnez un bénéficiaire</option>
-                                                                  @foreach ($comptes as $compte)
-                                                                  <option value="{{ $compte->id }}" {{ $compte->id == $check_annules -> compte_id ? 'selected' : '' }}>{{ $compte->nom }}</option>
+                                                            <label for="effet_compte_id" class="form-label">Compte: <span class="login-danger">*</span></label>
+                                                            <select class="form-control select @error('effet_compte_id') is-invalid @enderror" name="effet_compte_id" id="effet_compte_id">
+                                                                  <option selected disabled>Sélectionnez un compte</option>
+                                                                  @foreach ($effet_comptes as $compte)
+                                                                  <option value="{{ $compte->id }}" {{ $compte->id == $effet_annules -> effet_compte_id ? 'selected' : '' }}>{{ $compte->nom }}</option>
                                                                   @endforeach
                                                             </select>
-                                                            @error('compte_id')
+                                                            @error('effet_compte_id')
                                                             <span class="invalid-feedback" role="alert">
                                                                   <strong>{{ $message }}</strong>
                                                             </span>
@@ -116,7 +116,7 @@
                                                             <select class="form-control select @error('service_id') is-invalid @enderror" name="service_id" id="service_id">
                                                                   <option selected disabled>Select a service</option>
                                                                   @foreach ($services as $service)
-                                                                  <option value="{{ $service->id }}" {{ $service->id == $check_annules -> service_id ? 'selected' : '' }}>{{ $service->nom }}</option>
+                                                                  <option value="{{ $service->id }}" {{ $service->id == $effet_annules -> service_id ? 'selected' : '' }}>{{ $service->nom }}</option>
                                                                   @endforeach
                                                             </select>
                                                             @error('service_id')
@@ -129,24 +129,24 @@
                                                 <!-- Référence -->
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
-                                                            <label for="refe_check_annule">Référence:</label>
-                                                            <input type="text" class="form-control" id="refe_check_annule" name="refe_check_annule" value="{{$check_annules->refe_check_annule}}">
+                                                            <label for="refe_effet_annule">Référence:</label>
+                                                            <input type="text" class="form-control" id="refe_effet_annule" name="refe_effet_annule" value="{{$effet_annules->refe_effet_annule}}">
                                                       </div>
                                                 </div>
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
                                                             <label for="montant_annule">Monatant:</label>
-                                                            <input type="number" class="form-control" id="montant_annule" name="montant_annule" value="{{$check_annules->montant_annule}}" step="0.01">
+                                                            <input type="number" class="form-control" id="montant_annule" name="montant_annule" value="{{$effet_annules->montant_annule}}" step="0.01">
                                                       </div>
                                                 </div>
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
-                                                            <label for="retour_check_annule" class="form-label">RETOUR CHEQUE PHYSIQUE: <span class="login-danger">*</span></label>
-                                                            <select class="form-control select @error('retour_check_annule') is-invalid @enderror" name="retour_check_annule" id="retour_check_annule">
-                                                                  <option value="Oui" {{ old('retour_check_annule') == 'Oui' ? 'selected' : '' }}>Oui</option>
-                                                                  <option value="Non" {{ old('retour_check_annule') == 'Non' ? 'selected' : '' }}>Non</option>
+                                                            <label for="retour_effet_annule" class="form-label">RETOUR CHEQUE PHYSIQUE: <span class="login-danger">*</span></label>
+                                                            <select class="form-control select @error('retour_effet_annule') is-invalid @enderror" name="retour_effet_annule" id="retour_effet_annule">
+                                                                  <option value="Oui" {{ old('retour_effet_annule') == 'Oui' ? 'selected' : '' }}>Oui</option>
+                                                                  <option value="Non" {{ old('retour_effet_annule') == 'Non' ? 'selected' : '' }}>Non</option>
                                                             </select>
-                                                            @error('retour_check_annule')
+                                                            @error('retour_effet_annule')
                                                             <span class="invalid-feedback" role="alert">
                                                                   <strong>{{ $message }}</strong>
                                                             </span>
@@ -179,21 +179,21 @@
 
 <script>
       function updateFields() {
-            var selectElement = document.getElementById('check_id');
-            var selectedChecks = Array.from(selectElement.selectedOptions);
+            var selectElement = document.getElementById('effet_id');
+            var selectedEffets = Array.from(selectElement.selectedOptions);
 
-            if (selectedChecks.length > 0) {
-                  var selectedCheck = selectedChecks[0];
+            if (selectedEffets.length > 0) {
+                  var selectedEffet = selectedEffets[0];
 
-                  document.getElementById('cheque_sie_annule').value = selectedCheck.getAttribute('data-cheque_sie');
-                  document.getElementById('series_checkbook_annule').value = selectedCheck.getAttribute('data-series');
-                  document.getElementById('bank_check_annule').value = selectedCheck.getAttribute('data-banque');
-                  // document.getElementById('compte').value = selectedCheck.getAttribute('data-compte');
-                  // document.getElementById('reference').value = selectedCheck.getAttribute('data-reference');
-                  // document.getElementById('service').value = selectedCheck.getAttribute('data-service');
-                  // document.getElementById('beneficiaire').value = selectedCheck.getAttribute('data-beneficiaire');
-                  // document.getElementById('montant').value = selectedCheck.getAttribute('data-montant');
-                  console.log(document.getElementById('bank_check_annule').value);
+                  document.getElementById('effet_sie_annule').value = selectedEffet.getAttribute('data-effet_sie');
+                  document.getElementById('series_effet_annule').value = selectedEffet.getAttribute('data-series');
+                  document.getElementById('bank_effet_annule').value = selectedEffet.getAttribute('data-banque');
+                  // document.getElementById('compte').value = selectedEffet.getAttribute('data-compte');
+                  // document.getElementById('reference').value = selectedEffet.getAttribute('data-reference');
+                  // document.getElementById('service').value = selectedEffet.getAttribute('data-service');
+                  // document.getElementById('beneficiaire').value = selectedEffet.getAttribute('data-beneficiaire');
+                  // document.getElementById('montant').value = selectedEffet.getAttribute('data-montant');
+                  console.log(document.getElementById('bank_effet_annule').value);
             } else {
 
             }

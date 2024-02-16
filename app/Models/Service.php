@@ -19,6 +19,11 @@ class Service extends Model
         return $this->hasMany(ReglementCheque::class, 'service_id');
     }
 
+    public function reglementEffets()
+    {
+        return $this->hasMany(ReglementEffet::class, 'service_id');
+    }
+
     public function checkbooks()
     {
         return $this->hasMany(Checkbook::class, 'checkbook_id');

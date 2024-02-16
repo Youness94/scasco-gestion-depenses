@@ -21,7 +21,11 @@ class CheckAnnuleController extends Controller
     public function all_cheques_annule()
     {
 
-        $checks = CheckAnnule::all();
+        $checks = CheckAnnule::with('checkbook','service','benef','compte','reglementCheque')->get();
+        foreach ($checks as $check ){
+            Log::info($check->benef);
+        };
+  
         return view('checks_annules.all_checks_cancelled', compact('checks'));
     }
 

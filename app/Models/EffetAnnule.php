@@ -2,23 +2,24 @@
 
 namespace App\Models;
 
-use App\Http\Controllers\BeneCompteController;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class CheckAnnule extends Model
+class EffetAnnule extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
 
     public function user()
     {
         return $this->belongsTo(User::class);
     }
-    public function checkbook()
+    public function carnet_effet()
     {
-        return $this->belongsTo(Checkbook::class);
+        return $this->belongsTo(CarnetEffet::class);
     }
+
     public function service()
     {
         return $this->belongsTo(Service::class, 'service_id', 'id');
@@ -30,20 +31,20 @@ class CheckAnnule extends Model
 
     public function compte()
     {
-        return $this->belongsTo(CompteDepense::class, 'compte_id', 'id');
+        return $this->belongsTo(EffetCompte::class, 'effet_compte_id', 'id');
     }
 
-    public function reglementCheque()
+    public function reglementEffet()
     {
-        return $this->hasOne(ReglementCheque::class,'cheque_id');
+        return $this->hasOne(ReglementEffet::class,'effet_id');
     }
-    public function check()
+    public function effet()
     {
-        return $this->belongsTo(Check::class, 'check_id');
+        return $this->belongsTo(Effet::class, 'effet_id');
     }
 
-    public function ChequeAnnuleImages()
+    public function EffetAnnuleImages()
     {
-        return $this->hasMany(ChequeAnnuleImage::class, 'check_annule_id');
+        return $this->hasMany(EffetAnnuleImage::class, 'effet_annule_id');
     }
 }
