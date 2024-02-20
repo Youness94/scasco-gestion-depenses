@@ -22,8 +22,8 @@ use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
 use App\Rules\UniqueChequeId;
 use Barryvdh\DomPDF\Facade\Pdf;
-
-
+use Illuminate\Support\Facades\Storage;
+use ZipArchive;
 
 class ReglementChequeController extends Controller
 
@@ -78,7 +78,7 @@ class ReglementChequeController extends Controller
             'service_id' => 'required|exists:services,id',
             'referance' => 'required|string',
             'echeance' => 'required|date',
-            'montant' => 'required|integer',
+            'montant' => 'required|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'cheque_id' => [
                 'required',
@@ -183,7 +183,7 @@ class ReglementChequeController extends Controller
 
     public function ShowReglementCheque($id)
     {
-        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages','reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);
+        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages', 'reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);
         return view('reglement_cheques.show-reglement-cheque', compact('reglements'));
     }
     public function EditReglementCheque($id)
@@ -211,7 +211,7 @@ class ReglementChequeController extends Controller
             'service_id' => 'required|exists:services,id',
             'referance' => 'required|string',
             'echeance' => 'required|date',
-            'montant' => 'required|integer',
+            'montant' => 'required|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'cheque_id' => [
                 'nullable',
@@ -394,34 +394,139 @@ class ReglementChequeController extends Controller
         }
     }
 
-    
+
+    // public function generateReglementChequePDF($id)
+    // {
+    //     $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages', 'reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);
+    //     $date_reglement = $reglements->date_reglement;
+    //     $cheque = $reglements->cheque->number;
+    //     $compte = $reglements->compte->nom;
+    //     $bene = $reglements->bene->nom;
+    //     $service = $reglements->service->nom;
+    //     $referance = $reglements->referance;
+    //     $echeance =   $reglements->echeance;
+    //     $montant =    $reglements->montant;
+
+    //     // $data = [
+    //     //     'title' => $date_reglement,
+    //     //     'date' => date('m/d/Y'),
+    //     //     // 'date_reglement' =>  $date_reglement,
+    //     //     // 'cheque' => $cheque ,
+    //     //     // 'compte' => $compte,
+    //     //     // 'bene' => $bene,
+    //     //     // 'service' => $service,
+    //     //     // 'referance' => $referance,
+    //     //     // 'echeance' => $echeance,
+    //     //     // 'montant' => $montant,
+    //     //     'reglements' => $reglements
+    //     // ];
+
+    //     // $pdf = PDF::loadView('pdf.reglement_cheque_pdf', $data)->setPaper('a4');
+    //     // return $pdf->download("reglement_cheque_$date_reglement.pdf");
+
+
+    //     $images = $reglements->RelChequeImages;
+    //     $imagePaths = [];
+
+    //     foreach ($images as $image) {
+    //         $imagePaths[] = public_path("public/reglement_cheque_images/{$image->images}");
+    //     }
+
+    //     $data = [
+    //         'title' => $date_reglement,
+    //         'date' => date('m/d/Y'),
+    //         'reglements' => $reglements,
+    //         'imagePaths' => $imagePaths,
+    //     ];
+
+    //     // Load PDF view
+    //     $pdf = PDF::loadView('pdf.reglement_cheque_pdf', $data)->setPaper('a4');
+
+
+    //     $pdfFileName = "reglement_cheque_$date_reglement.pdf";
+    //     $pdfDirectory = 'pdf/';
+
+    //     if (!file_exists($pdfDirectory)) {
+    //         mkdir($pdfDirectory, 0755, true);
+    //     }
+
+    //     $pdf->save(public_path($pdfDirectory . $pdfFileName));
+
+    //     // Response with download link
+    //     return response()->download(public_path($pdfDirectory . $pdfFileName));
+    // }
     public function generateReglementChequePDF($id)
-    {
-        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages','reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);
-        $date_reglement = $reglements->date_reglement;
-        $cheque = $reglements->cheque->number;
-        $compte = $reglements->compte->nom;
-        $bene = $reglements->bene->nom;
-        $service = $reglements->service->nom;
-        $referance = $reglements->referance;
-        $echeance =   $reglements->echeance;
-        $montant =    $reglements->montant;
+{
+    $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages', 'reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);
+    $date_reglement = $reglements->date_reglement;
 
-        $data = [
-            'title' => $date_reglement,
-            'date' => date('m/d/Y'),
-            // 'date_reglement' =>  $date_reglement,
-            // 'cheque' => $cheque ,
-            // 'compte' => $compte,
-            // 'bene' => $bene,
-            // 'service' => $service,
-            // 'referance' => $referance,
-            // 'echeance' => $echeance,
-            // 'montant' => $montant,
-            'reglements' => $reglements
-        ];
 
-        $pdf = PDF::loadView('pdf.reglement_cheque_pdf', $data);
-        return $pdf->download("reglement_cheque_$date_reglement.pdf");
+    $images = $reglements->RelChequeImages;
+    $imagePaths = [];
+
+    foreach ($images as $image) {
+        $imagePaths[] = public_path("public/reglement_cheque_images/{$image->images}");
     }
+
+    $imageDirectory = 'reglement_cheque_images/';
+
+    // Create the directory if it doesn't exist
+    if (!file_exists(public_path($imageDirectory))) {
+        mkdir(public_path($imageDirectory), 0755, true);
+    }
+
+    // Copy images to the specified directory
+    foreach ($imagePaths as $imagePath) {
+        if (file_exists($imagePath)) {
+            $imageName = basename($imagePath);
+            $newImagePath = public_path("{$imageDirectory}{$imageName}");
+            copy($imagePath, $newImagePath);
+        } else {
+            Log::error("Image not found at path: {$imagePath}");
+        }
+    }
+
+    // Define the PDF file name
+    $pdfFileName = "reglement_cheque_$date_reglement.pdf";
+
+    // Load PDF view with image links
+    $pdf = PDF::loadView('pdf.reglement_cheque_pdf', [
+        'title' => $date_reglement,
+        'date' => date('m/d/Y'),
+        'imagePaths' => $imagePaths,
+        'reglements' => $reglements
+    ])->setPaper('a4');
+
+    // Save the PDF file within the 'public' directory
+    $pdf->save(public_path("pdf/$pdfFileName"));
+
+    // Create a zip archive
+    $zipFileName = "reglement_cheque_$date_reglement.zip";
+    $zipFilePath = public_path("pdf/$zipFileName");
+    $zip = new ZipArchive();
+    
+    if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+        // Add PDF file to the zip archive
+        $zip->addFile(public_path("pdf/$pdfFileName"), $pdfFileName);
+
+        // Add images to the zip archive
+        foreach ($imagePaths as $imagePath) {
+            if (file_exists($imagePath)) {
+                $imageName = basename($imagePath);
+                $zip->addFile($imagePath, "{$imageDirectory}{$imageName}");
+            } else {
+                Log::error("Image not found at path: {$imagePath}");
+            }
+        }
+
+        // Close the zip archive
+        $zip->close();
+
+        // Response with download link
+        return response()->download($zipFilePath);
+    } else {
+        Log::error("Failed to open zip archive");
+        return response()->json(['error' => 'Failed to create zip archive'], 500);
+    }
+}
 }

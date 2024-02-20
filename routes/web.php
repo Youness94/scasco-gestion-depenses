@@ -96,12 +96,11 @@ Route::middleware(['auth', 'role:responsable'])->group(function () {
 Route::controller(HomeController::class)->group(function () {
     Route::get('/accueil', 'index')->middleware('auth')->name('accueil');
     Route::get('user/profile/page', 'userProfile')->middleware('auth')->name('user/profile/page');
-    Route::get('teacher/dashboard', 'teacherDashboardIndex')->middleware('auth')->name('teacher/dashboard');
-    Route::get('student/dashboard', 'studentDashboardIndex')->middleware('auth')->name('student/dashboard');
+    // Route::get('teacher/dashboard', 'teacherDashboardIndex')->middleware('auth')->name('teacher/dashboard');
+    // Route::get('student/dashboard', 'studentDashboardIndex')->middleware('auth')->name('student/dashboard');
 
-    Route::get('/fetch-monthly-production-data', 'fetchMonthlyProductionData')->middleware('auth')->name('fetch.production.data');
-    Route::get('/fetch-monthly-sinistres-dim-data', 'fetchMonthlySinistresDimData')->middleware('auth')->name('fetch.sinistresdim.data');
-    Route::get('/fetch-monthly-sinistres-at-rd-data', 'fetchMonthlySinistresAtRdData')->middleware('auth')->name('fetch.sinistresatrd.data');
+    Route::get('/fetch-monthly-reglement-cheque', 'fetchMonthlyReglementCheque')->middleware('auth')->name('fetch.reglement.cheque');
+    Route::get('/fetch-monthly-reglement-effet', 'fetchMonthlyReglementEffet')->middleware('auth')->name('fetch.reglement.effet');
     Route::get('/pie-chart', 'pieChart')->middleware('auth')->name('pie.chart');
 });
 

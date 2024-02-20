@@ -15,7 +15,7 @@
 
                 @if (Session::get('role_name') === 'Super Admin')
                 <li class="submenu {{set_active(['liste/utilisateurs'])}} {{ (request()->is('view/user/edit/*')) ? 'active' : '' }}">
-                    <a href="#"><i class="fas fa-shield-alt"></i>
+                    <a href="#"> <i class="fa">&#xf007;</i>
                         <span>Utilisateurs</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -57,7 +57,7 @@
 
 
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-clipboard"></i>
+                    <a href="#"><i class="fa">&#xf07c;</i>
                         <span>Réglements/chèque</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -68,7 +68,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-clipboard"></i>
+                    <a href="#"><i class="fa" >&#xf058;</i>
                         <span>Chéques Débits</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -79,7 +79,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-clipboard"></i>
+                    <a href="#"><i class="fa">&#xf00d;</i>
                         <span>Chéques Annulés</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -90,7 +90,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-clipboard"></i>
+                    <a href="#"><i class="fa">&#xf07c;</i>
                         <span>Réglements/Effet</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -101,7 +101,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-clipboard"></i>
+                    <a href="#"><i class="fa" >&#xf058;</i>
                         <span>Effets Debits</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -112,7 +112,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-clipboard"></i>
+                    <a href="#"><i class="fa">&#xf00d;</i>
                         <span>Effets Annulés</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -128,7 +128,7 @@
                 <li class="menu-title">
                     <span>Gestion</span>
                 </li>
-
+               
                 <!-- <li class="submenu">
                     <a href="#"><i class="fas fa-cog"></i>
                         <span>Chéquiers</span>
@@ -174,7 +174,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-cog"></i>
+                    <a href="#"><i class="fa">&#xf0c0;</i>
                         <span>Courtiers</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -184,7 +184,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-cog"></i>
+                    <a href="#"><i class="fa">&#xf085;</i>
                         <span>Services</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -194,7 +194,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-cog"></i>
+                    <a href="#"><i class="fa" >&#xf19c;</i>
                         <span>Banques</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -204,7 +204,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-cog"></i>
+                    <a href="#"><i class="fa">&#xf1ad;</i>
                         <span>Compagnies</span>
                         <span class="menu-arrow"></span>
                     </a>
@@ -214,8 +214,8 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-cog"></i>
-                        <span>Compagnies</span>
+                    <a href="#"><i class="fa">&#xf0e8;</i>
+                        <span>Sous Comptes</span>
                         <span class="menu-arrow"></span>
                     </a>
                     <ul>
@@ -224,7 +224,7 @@
                     </ul>
                 </li>
                 <li class="submenu">
-                    <a href="#"><i class="fas fa-cog"></i>
+                    <a href="#"><i class="fa">&#xf0c0;</i>
                         <span>Bénéficiaires</span>
                         <span class="menu-arrow"></span>
                     </a>

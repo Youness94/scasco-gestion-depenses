@@ -36,35 +36,83 @@
                             </div>
                         </div>
 
-                        <div class="card-body">
-                            <p><strong>Affectation Date:</strong> {{ $affectation->affectation_date }}</p>
-                            <p><strong>Checkbook:</strong> {{ $affectation->checkbook->series }}</p>
-                            <p><strong>Start Number:</strong> {{ $affectation->start_number }}</p>
-                            <p><strong>End Number:</strong> {{ $affectation->end_number }}</p>
-                            <p><strong>Service:</strong> {{ $affectation->service->nom }}</p>
-                            <p><strong>Courtier:</strong> {{ $affectation->courtier->nom }}</p>
 
+                        <div class="row mt-10 pt-100">
+                            <div class="col-xl-12">
 
-                            @if($affectation->images && count($affectation->images) > 0)
-                            <div class="mt-4">
-                                <p><strong>Images:</strong></p>
-                                <div class="row" onclick="window.location='{{ asset('/storage/' . $affectation->images[0]) }}';" style="cursor:pointer;">
-                                    @foreach($affectation->images as $image)
-                                    <div class="col-md-3 mb-3">
-                                        <img src="{{ asset('/storage/' . $image) }}" alt="Affectation Image" class="img-fluid" style="max-width: 300px; max-height: 300px;">
-                                    </div>
-                                    @endforeach
-                                </div>
+                                <ul class="list-unstyled float-end">
+                                    <li style="font-size: 30px; color: red;">Détails d'affectation</li>
+                                    <!-- <li>Mode: Chèque</li> -->
+                                </ul>
                             </div>
-                            @endif
                         </div>
+
+                        <!-- <div class="row text-center">
+                              <h3 class="text-uppercase text-center mt-10" style="font-size: 10px;">Règlement par Chèque</h3>
+                              <p></p>
+                        </div> -->
+
+                        <div class="row mx-3 mt-10 pt-100">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Date d'affectation</td>
+                                        <td>{{ $affectation->affectation_date }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Série de chequier</td>
+                                        <td>{{ $affectation->checkbook->series }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Numéro de premier chèque</td>
+                                        <td>{{ $affectation->start_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Numéro de dernier chèque</td>
+                                        <td>{{ $affectation->end_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Service</td>
+                                        <td>{{ $affectation->service->nom }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Courtier</td>
+                                        <td>{{ $affectation->courtier->nom }}</td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+
+                        </div>
+                        @if($affectation->images && count($affectation->images) > 0)
+                        <div class="mt-4">
+                            <p><strong>Images:</strong></p>
+                            <div class="row" onclick="window.location='{{ asset('/storage/' . $affectation->images[0]) }}';" style="cursor:pointer;">
+                                @foreach($affectation->images as $image)
+                                <div class="col-md-3 mb-3">
+                                    <img src="{{ asset('/storage/' . $image) }}" alt="Affectation Image" class="img-fluid" style="max-width: 300px; max-height: 300px;">
+                                </div>
+                                @endforeach
+                            </div>
+                        </div>
+                        @endif
+                        <div class="card-footer bg-black"></div>
                     </div>
+
                 </div>
+
             </div>
+
         </div>
     </div>
-
 </div>
+
 
 @section('script')
 

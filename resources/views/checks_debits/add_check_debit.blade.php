@@ -7,10 +7,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Ajouter Chèque Annulé</h3>
+                    <h3 class="page-title">Ajouter Chèque Débit</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{route('all.checks-debit')}}">Chèquiers</a></li>
-                        <li class="breadcrumb-item active">Ajouter Chèque Annulé</li>
+                        <li class="breadcrumb-item active">Ajouter Chèque Débit</li>
                     </ul>
                 </div>
             </div>

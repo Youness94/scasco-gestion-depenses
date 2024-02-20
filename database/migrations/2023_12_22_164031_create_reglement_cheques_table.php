@@ -20,7 +20,7 @@ return new class extends Migration
             $table->foreignId('compte_id')->constrained('compte_depenses')->onDelete('cascade');
             $table->foreignId('benefiiaire_id')->constrained('bene_comptes')->onDelete('cascade');
             $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->integer('montant');
+            $table->decimal('montant', 8, 5);
             $table->date('echeance');
             $table->string('referance');
             $table->timestamps();

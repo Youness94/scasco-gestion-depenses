@@ -29,7 +29,7 @@ class ReglementCheque extends Model
     }
     public function reglementCltRistourne()
     {
-        return $this->hasMany(reglementCltRistourne::class,  'reglement_cheque_id', 'id');
+        return $this->hasMany(ReglementCltRistourn::class,  'reglement_cheque_id', 'id');
     }
 
     public function cheque()

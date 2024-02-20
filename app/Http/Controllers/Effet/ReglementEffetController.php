@@ -16,6 +16,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
+use ZipArchive;
 
 class ReglementEffetController extends Controller
 {
@@ -69,7 +70,7 @@ class ReglementEffetController extends Controller
             'service_id' => 'required|exists:services,id',
             'referance' => 'required|string',
             'echeance' => 'required|date',
-            'montant' => 'required|integer',
+            'montant' => 'required|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'effet_id' => [
                 'required',
@@ -155,7 +156,7 @@ class ReglementEffetController extends Controller
 
     public function ShowReglementEffet($id)
     {
-        $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelChequeEffetImages', 'reglementEffetFournisseur'])->findOrFail($id);
+        $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelEffetImages', 'reglementEffetFournisseur'])->findOrFail($id);
         return view('reglement_effets.show-reglement-effet', compact('reglements'));
     }
     public function EditReglementEffet($id)
@@ -183,7 +184,7 @@ class ReglementEffetController extends Controller
             'service_id' => 'required|exists:services,id',
             'referance' => 'required|string',
             'echeance' => 'required|date',
-            'montant' => 'required|integer',
+            'montant' => 'required|string',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:2048',
             'effet_id' => [
                 'nullable',
@@ -284,11 +285,40 @@ class ReglementEffetController extends Controller
             return redirect()->back()->with('error', 'Error');
         }
     }
+    // public function generateReglementEffetPDF($id)
+    // {
+    //     $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelEffetImages', 'reglementEffetFournisseur'])->findOrFail($id);
+    //     $date_reglement = $reglements->date_reglement;
+    //     $cheque = $reglements->effet->effet_number;
+    //     $compte = $reglements->effet_compte->nom;
+    //     $bene = $reglements->bene->nom;
+    //     $service = $reglements->service->nom;
+    //     $referance = $reglements->referance;
+    //     $echeance =   $reglements->echeance;
+    //     $montant =    $reglements->montant;
+
+    //     $data = [
+    //         'title' => $date_reglement,
+    //         'date' => date('m/d/Y'),
+    //         // 'date_reglement' =>  $date_reglement,
+    //         // 'cheque' => $cheque ,
+    //         // 'compte' => $compte,
+    //         // 'bene' => $bene,
+    //         // 'service' => $service,
+    //         // 'referance' => $referance,
+    //         // 'echeance' => $echeance,
+    //         // 'montant' => $montant,
+    //         'reglements' => $reglements
+    //     ];
+
+    //     $pdf = PDF::loadView('pdf.reglement_effet_pdf', $data)->setPaper('a4');
+    //     return $pdf->download("reglement_effet_$date_reglement.pdf");
+    // }
     public function generateReglementEffetPDF($id)
-    {
-        $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelEffetImages', 'reglementEffetFournisseur'])->findOrFail($id);
+{
+    $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelEffetImages', 'reglementEffetFournisseur'])->findOrFail($id);
         $date_reglement = $reglements->date_reglement;
-        $cheque = $reglements->cheque->number;
+        $cheque = $reglements->effet->effet_number;
         $compte = $reglements->effet_compte->nom;
         $bene = $reglements->bene->nom;
         $service = $reglements->service->nom;
@@ -296,21 +326,73 @@ class ReglementEffetController extends Controller
         $echeance =   $reglements->echeance;
         $montant =    $reglements->montant;
 
-        $data = [
-            'title' => $date_reglement,
-            'date' => date('m/d/Y'),
-            // 'date_reglement' =>  $date_reglement,
-            // 'cheque' => $cheque ,
-            // 'compte' => $compte,
-            // 'bene' => $bene,
-            // 'service' => $service,
-            // 'referance' => $referance,
-            // 'echeance' => $echeance,
-            // 'montant' => $montant,
-            'reglements' => $reglements
-        ];
 
-        $pdf = PDF::loadView('pdf.reglement_effet_pdf', $data);
-        return $pdf->download("reglement_effet_$date_reglement.pdf");
+    $images = $reglements->RelEffetImages;
+    $imagePaths = [];
+
+    foreach ($images as $image) {
+        $imagePaths[] = public_path("public/reglement_effet_images/{$image->images}");
     }
+
+    $imageDirectory = 'reglement_effet_images/';
+
+    // Create the directory if it doesn't exist
+    if (!file_exists(public_path($imageDirectory))) {
+        mkdir(public_path($imageDirectory), 0755, true);
+    }
+
+    // Copy images to the specified directory
+    foreach ($imagePaths as $imagePath) {
+        if (file_exists($imagePath)) {
+            $imageName = basename($imagePath);
+            $newImagePath = public_path("{$imageDirectory}{$imageName}");
+            copy($imagePath, $newImagePath);
+        } else {
+            Log::error("Image not found at path: {$imagePath}");
+        }
+    }
+
+    // Define the PDF file name
+    $pdfFileName = "reglement_effet_$date_reglement.pdf";
+
+    // Load PDF view with image links
+    $pdf = PDF::loadView('pdf.reglement_effet_pdf', [
+        'title' => $date_reglement,
+        'date' => date('m/d/Y'),
+        'imagePaths' => $imagePaths,
+        'reglements' => $reglements
+    ])->setPaper('a4');
+
+    // Save the PDF file within the 'public' directory
+    $pdf->save(public_path("pdf/$pdfFileName"));
+
+    // Create a zip archive
+    $zipFileName = "reglement_effet_$date_reglement.zip";
+    $zipFilePath = public_path("pdf/$zipFileName");
+    $zip = new ZipArchive();
+    
+    if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+        // Add PDF file to the zip archive
+        $zip->addFile(public_path("pdf/$pdfFileName"), $pdfFileName);
+
+        // Add images to the zip archive
+        foreach ($imagePaths as $imagePath) {
+            if (file_exists($imagePath)) {
+                $imageName = basename($imagePath);
+                $zip->addFile($imagePath, "{$imageDirectory}{$imageName}");
+            } else {
+                Log::error("Image not found at path: {$imagePath}");
+            }
+        }
+
+        // Close the zip archive
+        $zip->close();
+
+        // Response with download link
+        return response()->download($zipFilePath);
+    } else {
+        Log::error("Failed to open zip archive");
+        return response()->json(['error' => 'Failed to create zip archive'], 500);
+    }
+}
 }

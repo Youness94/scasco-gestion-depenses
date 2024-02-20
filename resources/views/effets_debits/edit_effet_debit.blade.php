@@ -42,7 +42,7 @@
             data-reference="{{ old('effet_id.' . $loop->index . '.reference', $effet->reglementEffet->referance) }}"
             data-service="{{ old('effet_id.' . $loop->index . '.service', $effet->reglementEffet->service->nom) }}"
             data-beneficiaire="{{ old('effet_id.' . $loop->index . '.beneficiaire', $effet->reglementEffet->bene->nom) }}"
-            data-montant="{{ old('effet_id.' . $loop->index . '.effet_montant', $effet->reglementEffet->montant) }}">
+            data-montant="{{ old('effet_id.' . $loop->index . '.montant', $effet->reglementEffet->montant) }}">
             {{ $effet->effet_number }}
         </option>
     @endforeach
@@ -57,13 +57,13 @@
 
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
-                                                            <label for="effet_sie_debit" class="form-label">Chèque Sie:</label>
+                                                            <label for="effet_sie_debit" class="form-label">Effet Sie:</label>
                                                             <input type="text" class="form-control" id="effet_sie_debit" name="effet_sie_debit" readonly value="{{ old('effet_sie_debit', $effet_debit->effet_sie_debit) }}">
                                                       </div>
                                                 </div>
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
-                                                            <label for="effet_series_debit" class="form-label">Checkbook Series:</label>
+                                                            <label for="effet_series_debit" class="form-label">Effet Series:</label>
                                                             <input type="text" class="form-control" id="effet_series_debit" name="effet_series_debit" readonly value="{{ old('effet_series_debit', $effet_debit->effet_series_debit) }}">
                                                       </div>
                                                 </div>
@@ -99,8 +99,8 @@
                                                 </div>
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
-                                                            <label for="effet_montant_debit" class="form-label">Montant:</label>
-                                                            <input type="text" class="form-control" id="effet_montant_debit" name="effet_montant_debit" readonly value="{{ old('effet_montant_debit', $effet_debit->effet_montant_debit) }}">
+                                                            <label for="effet_amount_debit" class="form-label">Montant:</label>
+                                                            <input type="text" class="form-control" id="effet_amount_debit" name="effet_amount_debit" readonly value="{{ old('effet_amount_debit', $effet_debit->effet_amount_debit) }}">
                                                       </div>
                                                 </div>
 
@@ -140,8 +140,8 @@
                   document.getElementById('effet_compte_debit').value = selectedEffet.getAttribute('data-compte');
                   document.getElementById('effet_reference_debit').value = selectedEffet.getAttribute('data-reference');
                   document.getElementById('effet_service_debit').value = selectedEffet.getAttribute('data-service');
-                  document.getElementById('effet_beneficiaire_debit').value = selectedEffet.getAttribute('data-beneficiaire');
-                  document.getElementById('effet_montant_debit').value = selectedEffet.getAttribute('data-montant');
+                  document.getElementById('effet_beneficiare_debit').value = selectedEffet.getAttribute('data-beneficiaire');
+                  document.getElementById('effet_amount_debit').value = selectedEffet.getAttribute('data-montant');
                   document.getElementById('effet_banque_debit').value = selectedEffet.getAttribute('data-banque');
                   console.log(document.getElementById('effet_id').value);
             } else {

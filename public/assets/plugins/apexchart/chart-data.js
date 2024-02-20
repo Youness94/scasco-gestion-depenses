@@ -238,443 +238,345 @@ $(document).ready(function () {
 
     // ======================== fetch-monthly-production-data   monthlyProductionChart
 
-    // $(document).ready(function () {
-    //     // Declare chartBar as a global variable outside the function
-    //     var chartBar;
-    //     var last12MonthsDate = new Date();
-    //     last12MonthsDate.setMonth(last12MonthsDate.getMonth() - 12);
+    $(document).ready(function () {
+        // Declare chartBar as a global variable outside the function
+        var chartBar;
+        var last12MonthsDate = new Date();
+        last12MonthsDate.setMonth(last12MonthsDate.getMonth() - 12);
     
-    //     function fetchAndRefreshChart() {
-    //         $.ajax({
-    //             url: "/fetch-monthly-production-data",
-    //             method: "GET",
-    //             dataType: "json",
-    //             data: { startDate: last12MonthsDate.toISOString() },
-    //             success: function (response) {
-    //                 // console.log("Response:", response);
+        function fetchAndRefreshChart() {
+            $.ajax({
+                url: "/fetch-monthly-reglement-cheque",
+                method: "GET",
+                dataType: "json",
+                data: { startDate: last12MonthsDate.toISOString() },
+                success: function (response) {
+                    // console.log("Response:", response);
     
-    //                 // Sort the response data based on the order of months
-    //                 response.sort(function (a, b) {
-    //                     return months.indexOf(a.month) - months.indexOf(b.month);
-    //                 });
+                    // Sort the response data based on the order of months
+                    response.sort(function (a, b) {
+                        return months.indexOf(a.month) - months.indexOf(b.month);
+                    });
     
-    //                 var optionsBar = {
-    //                     chart: {
-    //                         type: "bar",
-    //                         height: 350,
-    //                         stacked: false,
-    //                         toolbar: { show: false },
-    //                     },
-    //                     dataLabels: {
-    //                         enabled: true,
-    //                         formatter: function (val) {
-    //                             return val;
-    //                         },
-    //                         offsetY: 10,
-    //                         style: {
-    //                             fontSize: "20px",
-    //                             colors: ["#FFFFFF"],
-    //                         },
-    //                     },
-    //                     plotOptions: {
-    //                         bar: { columnWidth: "55%", endingShape: "flat" },
-    //                     },
-    //                     stroke: {
-    //                         show: true,
-    //                         width: 2,
-    //                         colors: ["transparent"],
-    //                     },
-    //                     series: [
-    //                         {
-    //                             name: "Productions",
-    //                             color: "#70C4CF",
-    //                             data: response.map((production) => production.count),
-    //                         },
-    //                     ],
-    //                     labels: response.map((production) => production.month),
-    //                     xaxis: {
-    //                         labels: {
-    //                             show: true,
-    //                             rotate: -45,
-    //                             style: {
-    //                                 fontSize: "14px",
-    //                                 colors: "#777",
-    //                             },
-    //                         },
-    //                         axisBorder: {
-    //                             show: false,
-    //                         },
-    //                         axisTicks: {
-    //                             show: false,
-    //                         },
-    //                     },
-    //                     yaxis: {
-    //                         axisBorder: {
-    //                             show: false,
-    //                         },
-    //                         axisTicks: {
-    //                             show: false,
-    //                         },
-    //                         labels: {
-    //                             style: {
-    //                                 colors: "#777",
-    //                             },
-    //                         },
-    //                     },
-    //                     title: {
-    //                         text: "",
-    //                         align: "left",
-    //                         style: { fontSize: "18px" },
-    //                     },
-    //                     tooltip: {
-    //                         x: {
-    //                             formatter: function (value) {
-    //                                 return value;
-    //                             },
-    //                         },
-    //                     },
-    //                 };
+                    var optionsBar = {
+                        chart: {
+                            type: "bar",
+                            height: 350,
+                            stacked: false,
+                            toolbar: { show: false },
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function (val) {
+                                return val;
+                            },
+                            offsetY: 10,
+                            style: {
+                                fontSize: "20px",
+                                colors: ["#FFFFFF"],
+                            },
+                        },
+                        plotOptions: {
+                            bar: { columnWidth: "55%", endingShape: "flat" },
+                        },
+                        stroke: {
+                            show: true,
+                            width: 2,
+                            colors: ["transparent"],
+                        },
+                        series: [
+                            {
+                                name: "Réglements Par Cheques",
+                                color: "#70C4CF",
+                                data: response.map((reglement_cheque) => reglement_cheque.count),
+                            },
+                        ],
+                        labels: response.map((reglement_cheque) => reglement_cheque.month),
+                        xaxis: {
+                            labels: {
+                                show: true,
+                                rotate: -45,
+                                style: {
+                                    fontSize: "14px",
+                                    colors: "#777",
+                                },
+                            },
+                            axisBorder: {
+                                show: false,
+                            },
+                            axisTicks: {
+                                show: false,
+                            },
+                        },
+                        yaxis: {
+                            axisBorder: {
+                                show: false,
+                            },
+                            axisTicks: {
+                                show: false,
+                            },
+                            labels: {
+                                style: {
+                                    colors: "#777",
+                                },
+                            },
+                        },
+                        title: {
+                            text: "",
+                            align: "left",
+                            style: { fontSize: "18px" },
+                        },
+                        tooltip: {
+                            x: {
+                                formatter: function (value) {
+                                    return value;
+                                },
+                            },
+                        },
+                    };
     
-    //                 // Destroy the existing chart before rendering a new one
-    //                 if (chartBar) {
-    //                     chartBar.destroy();
-    //                 }
+                    // Destroy the existing chart before rendering a new one
+                    if (chartBar) {
+                        chartBar.destroy();
+                    }
     
-    //                 // Use the global chartBar variable
-    //                 chartBar = new ApexCharts(
-    //                     document.querySelector("#monthlyProductionChart"),
-    //                     optionsBar
-    //                 );
-    //                 chartBar.render();
-    //             },
-    //             error: function (error) {
-    //                 console.error("Error fetching data:", error);
-    //             },
-    //         });
-    //     }
+                    // Use the global chartBar variable
+                    chartBar = new ApexCharts(
+                        document.querySelector("#monthlyReglemetCheque"),
+                        optionsBar
+                    );
+                    chartBar.render();
+                },
+                error: function (error) {
+                    console.error("Error fetching data:", error);
+                },
+            });
+        }
     
-    //     // Set up a timer to refresh the chart periodically (e.g., every 30 seconds)
-    //     setInterval(fetchAndRefreshChart, 30000);
+        // Set up a timer to refresh the chart periodically (e.g., every 30 seconds)
+        setInterval(fetchAndRefreshChart, 30000);
     
-    //     // Months array to define the order of months
-    //     var months = [
-    //         "January",
-    //         "February",
-    //         "March",
-    //         "April",
-    //         "May",
-    //         "June",
-    //         "July",
-    //         "August",
-    //         "September",
-    //         "October",
-    //         "November",
-    //         "December",
-    //     ];
+        // Months array to define the order of months
+        var months = [
+            "January",
+            "February",
+            "March",
+            "April",
+            "May",
+            "June",
+            "July",
+            "August",
+            "September",
+            "October",
+            "November",
+            "December",
+        ];
     
-    //     // Initial fetch
-    //     fetchAndRefreshChart();
-    // });
+        // Initial fetch
+        fetchAndRefreshChart();
+    });
     
     
     
     
     // //end chart production
 
-    // $(document).ready(function () {
-    //     // Variable to store the chart instance
-    //     var chartBar;
-    //     var last12MonthsDate = new Date();
-    //     last12MonthsDate.setMonth(last12MonthsDate.getMonth() - 12);
-    //     function fetchAndRefreshChart() {
-    //         $.ajax({
-    //             url: "/fetch-monthly-sinistres-dim-data",
-    //             method: "GET",
-    //             dataType: "json",
-    //             data: { startDate: last12MonthsDate.toISOString() },
-    //             success: function (response) {
-    //                 var optionsBar = {
-    //                     chart: {
-    //                         type: "bar",
-    //                         height: 350,
-    //                         stacked: false,
-    //                         toolbar: { show: false },
-    //                     },
-    //                     dataLabels: {
-    //                         enabled: true,
-    //                         formatter: function (val) {
-    //                             return val;
-    //                             // return val === 1 ? val + " Sinistre DIM" : val + " Sinistres DIM";
-    //                         },
-    //                         offsetY: 10, // Adjust the offset to position the labels properly
-    //                         style: {
-    //                             fontSize: "20px",
-    //                             colors: ["#FFFFFF"],
-    //                         },
-    //                     },
-    //                     plotOptions: {
-    //                         bar: { columnWidth: "55%", endingShape: "flat" },
-    //                     },
-    //                     stroke: {
-    //                         show: true,
-    //                         width: 2,
-    //                         colors: ["transparent"],
-    //                     },
-    //                     series: [
-    //                         {
-    //                             name: "Sinisters DIM",
-    //                             color: "#70C4CF",
-    //                             data: response.map(
-    //                                 (sinistres_dim) => sinistres_dim.count
-    //                             ),
-    //                         },
-    //                     ],
-    //                     labels: response.map((production) => production.month),
-    //                     xaxis: {
-    //                         labels: {
-    //                             show: true,
-    //                             rotate: -45,
-    //                             style: {
-    //                                 fontSize: "14px",
-    //                                 colors: "#777",
-    //                             },
-    //                         },
-    //                         axisBorder: {
-    //                             show: false,
-    //                         },
-    //                         axisTicks: {
-    //                             show: false,
-    //                         },
-    //                     },
-    //                     yaxis: {
-    //                         axisBorder: {
-    //                             show: false,
-    //                         },
-    //                         axisTicks: {
-    //                             show: false,
-    //                         },
-    //                         labels: {
-    //                             style: {
-    //                                 colors: "#777",
-    //                             },
-    //                         },
-    //                     },
-    //                     title: {
-    //                         text: "",
-    //                         align: "left",
-    //                         style: { fontSize: "18px" },
-    //                     },
-    //                 };
+    $(document).ready(function () {
+        // Declare chartBar as a global variable outside the function
+        var chartBar;
+        var last12MonthsDate = new Date();
+        last12MonthsDate.setMonth(last12MonthsDate.getMonth() - 12);
+    
+        function fetchAndRefreshChart() {
+            $.ajax({
+                url: "/fetch-monthly-reglement-effet",
+                method: "GET",
+                dataType: "json",
+                data: { startDate: last12MonthsDate.toISOString() },
+                success: function (response) {
+                    // console.log("Response:", response);
+    
+                    // Sort the response data based on the order of months
+                    response.sort(function (a, b) {
+                        return months.indexOf(a.month) - months.indexOf(b.month);
+                    });
+    
+                    var optionsBar = {
+                        chart: {
+                            type: "bar",
+                            height: 350,
+                            stacked: false,
+                            toolbar: { show: false },
+                        },
+                        dataLabels: {
+                            enabled: true,
+                            formatter: function (val) {
+                                return val;
+                            },
+                            offsetY: 10,
+                            style: {
+                                fontSize: "20px",
+                                colors: ["#FFFFFF"],
+                            },
+                        },
+                        plotOptions: {
+                            bar: { columnWidth: "55%", endingShape: "flat" },
+                        },
+                        stroke: {
+                            show: true,
+                            width: 2,
+                            colors: ["transparent"],
+                        },
+                        series: [
+                            {
+                                name: "Réglements Par Effets",
+                                color: "#70C4CF",
+                                data: response.map((reglement_effet) => reglement_effet.count),
+                            },
+                        ],
+                        labels: response.map((reglement_effet) => reglement_effet.month),
+                        xaxis: {
+                            labels: {
+                                show: true,
+                                rotate: -45,
+                                style: {
+                                    fontSize: "14px",
+                                    colors: "#777",
+                                },
+                            },
+                            axisBorder: {
+                                show: false,
+                            },
+                            axisTicks: {
+                                show: false,
+                            },
+                        },
+                        yaxis: {
+                            axisBorder: {
+                                show: false,
+                            },
+                            axisTicks: {
+                                show: false,
+                            },
+                            labels: {
+                                style: {
+                                    colors: "#777",
+                                },
+                            },
+                        },
+                        title: {
+                            text: "",
+                            align: "left",
+                            style: { fontSize: "18px" },
+                        },
+                        tooltip: {
+                            x: {
+                                formatter: function (value) {
+                                    return value;
+                                },
+                            },
+                        },
+                    };
+    
+                    // Destroy the existing chart before rendering a new one
+                    if (chartBar) {
+                        chartBar.destroy();
+                    }
 
-    //                 // Destroy the existing chart before rendering a new one
-    //                 if (chartBar) {
-    //                     chartBar.destroy();
-    //                 }
+                    chartBar = new ApexCharts(
+                        document.querySelector("#monthlyReglemetEffet"),
+                        optionsBar
+                    );
+                    chartBar.render();
+                },
+                error: function (error) {
+                    console.error("Error fetching data:", error);
+                },
+            });
+        }
 
-    //                 chartBar = new ApexCharts(
-    //                     document.querySelector("#monthlySinistresDimChart"),
-    //                     optionsBar
-    //                 );
-    //                 chartBar.render();
-    //             },
-    //             error: function (error) {
-    //                 console.error("Error fetching data:", error);
-    //             },
-    //         });
-    //     }
+        fetchAndRefreshChart();
 
-    //     fetchAndRefreshChart();
-
-    //     // Set up a timer to refresh the chart periodically (e.g., every 30 seconds)
-    //     setInterval(fetchAndRefreshChart, 30000);
-    // });
+        // Set up a timer to refresh the chart periodically (e.g., every 30 seconds)
+        setInterval(fetchAndRefreshChart, 30000);
+    });
     // //end chart sinistres dim
 
-    // // start chart sinistres at and rd
-    // $(document).ready(function () {
-    //     // Variable to store the chart instance
-    //     var chartBar;
-    //     var last12MonthsDate = new Date();
-    //     last12MonthsDate.setMonth(last12MonthsDate.getMonth() - 12);
-
-    //     function fetchAndRefreshChart() {
-    //         $.ajax({
-    //             url: "/fetch-monthly-sinistres-at-rd-data",
-    //             method: "GET",
-    //             dataType: "json",
-    //             data: { startDate: last12MonthsDate.toISOString() },
-    //             success: function (response) {
-    //                 var optionsBar = {
-    //                     chart: {
-    //                         type: "bar",
-    //                         height: 350,
-    //                         stacked: false,
-    //                         toolbar: { show: false },
-    //                     },
-    //                     dataLabels: {
-    //                         enabled: true,
-    //                         formatter: function (val) {
-    //                             return val;
-    //                             // return val === 1 ? val + " Sinistre AT&RD" : val + " Sinistres AT&RD";
-    //                         },
-    //                         offsetY: 10, // Adjust the offset to position the labels properly
-    //                         style: {
-    //                             fontSize: "20px",
-    //                             colors: ["#FFFFFF"],
-    //                         },
-    //                     },
-    //                     plotOptions: {
-    //                         bar: { columnWidth: "55%", endingShape: "flat" },
-    //                     },
-    //                     stroke: {
-    //                         show: true,
-    //                         width: 2,
-    //                         colors: ["transparent"],
-    //                     },
-    //                     series: [
-    //                         {
-    //                             name: "Sinisters AT&RD",
-    //                             color: "#70C4CF",
-    //                             data: response.map(
-    //                                 (sinistres_at_rd) => sinistres_at_rd.count
-    //                             ),
-    //                         },
-    //                     ],
-    //                     labels: response.map((production) => production.month),
-    //                     xaxis: {
-    //                         labels: {
-    //                             show: true,
-    //                             rotate: -45,
-    //                             style: {
-    //                                 fontSize: "14px",
-    //                                 colors: "#777",
-    //                             },
-    //                         },
-    //                         axisBorder: {
-    //                             show: false,
-    //                         },
-    //                         axisTicks: {
-    //                             show: false,
-    //                         },
-    //                     },
-    //                     yaxis: {
-    //                         axisBorder: {
-    //                             show: false,
-    //                         },
-    //                         axisTicks: {
-    //                             show: false,
-    //                         },
-    //                         labels: {
-    //                             style: {
-    //                                 colors: "#777",
-    //                             },
-    //                         },
-    //                     },
-    //                     title: {
-    //                         text: "",
-    //                         align: "left",
-    //                         style: { fontSize: "18px" },
-    //                     },
-    //                 };
-
-    //                 // Destroy the existing chart before rendering a new one
-    //                 if (chartBar) {
-    //                     chartBar.destroy();
-    //                 }
-
-    //                 chartBar = new ApexCharts(
-    //                     document.querySelector("#monthlySinistresAtRdChart"),
-    //                     optionsBar
-    //                 );
-    //                 chartBar.render();
-    //             },
-    //             error: function (error) {
-    //                 console.error("Error fetching data:", error);
-    //             },
-    //         });
-    //     }
-
-    //     fetchAndRefreshChart();
-
-    //     // Set up a timer to refresh the chart periodically (e.g., every 30 seconds)
-    //     setInterval(fetchAndRefreshChart, 30000);
-    // });
-
-    // //end chart sinistres at and rd
-
-    // $(document).ready(function () {
-    //     // Variable to store the chart instance
-    //     var chartPie;
     
-    //     function fetchAndRefreshChart() {
-    //         $.ajax({
-    //             url: "/pie-chart",
-    //             method: "GET",
-    //             dataType: "json",
-    //             // Remove the date filtering to get data for all months
-    //             success: function (response) {
-    //                 //   console.log(response);
+
+    $(document).ready(function () {
+        // Variable to store the chart instance
+        var chartPie;
+    
+        function fetchAndRefreshChart() {
+            $.ajax({
+                url: "/pie-chart",
+                method: "GET",
+                dataType: "json",
+                // Remove the date filtering to get data for all months
+                success: function (response) {
+                    //   console.log(response);
                     
-    //                 new Chart(document.getElementById("pieChart"), {
-    //                     type: "pie",
-    //                     data: {
-    //                         labels: response.labels,
-    //                         datasets: [
-    //                             {
-    //                                 data: response.values,
-    //                                 backgroundColor: [
-    //                                     "#FF6384",
-    //                                     "#36A2EB",
-    //                                     "#FFCE56",
-    //                                 ],
-    //                             },
-    //                         ],
-    //                     },
-    //                     options: {
-    //                         maintainAspectRatio: false,
-    //                         cutoutPercentage: 65,
-    //                         tooltips: {
-    //                             callbacks: {
-    //                                 label: function (tooltipItem, data) {
-    //                                     var dataset =
-    //                                         data.datasets[
-    //                                             tooltipItem.datasetIndex
-    //                                         ];
-    //                                     var total = dataset.data.reduce(
-    //                                         function (
-    //                                             previousValue,
-    //                                             currentValue,
-    //                                             currentIndex,
-    //                                             array
-    //                                         ) {
-    //                                             return (
-    //                                                 previousValue + currentValue
-    //                                             );
-    //                                         }
-    //                                     );
-    //                                     var currentValue =
-    //                                         dataset.data[tooltipItem.index];
-    //                                     var percentage = Math.floor(
-    //                                         (currentValue / total) * 100 + 0.5
-    //                                     );
-    //                                     return currentValue + " (" + percentage + "%)";
-    //                                 },
-    //                             },
-    //                         },
-    //                     },
-    //                 });
-    //             },
-    //             error: function (error) {
-    //                 console.error("Error fetching data:", error);
-    //             },
-    //         });
-    //     }
+                    new Chart(document.getElementById("pieChart"), {
+                        type: "pie",
+                        data: {
+                            labels: response.labels,
+                            datasets: [
+                                {
+                                    data: response.values,
+                                    backgroundColor: [
+                                        "#FF6384",
+                                        "#36A2EB",
+                                        "#FFCE56",
+                                    ],
+                                },
+                            ],
+                        },
+                        options: {
+                            maintainAspectRatio: false,
+                            cutoutPercentage: 65,
+                            tooltips: {
+                                callbacks: {
+                                    label: function (tooltipItem, data) {
+                                        var dataset =
+                                            data.datasets[
+                                                tooltipItem.datasetIndex
+                                            ];
+                                        var total = dataset.data.reduce(
+                                            function (
+                                                previousValue,
+                                                currentValue,
+                                                currentIndex,
+                                                array
+                                            ) {
+                                                return (
+                                                    previousValue + currentValue
+                                                );
+                                            }
+                                        );
+                                        var currentValue =
+                                            dataset.data[tooltipItem.index];
+                                        var percentage = Math.floor(
+                                            (currentValue / total) * 100 + 0.5
+                                        );
+                                        return currentValue + " (" + percentage + "%)";
+                                    },
+                                },
+                            },
+                        },
+                    });
+                },
+                error: function (error) {
+                    console.error("Error fetching data:", error);
+                },
+            });
+        }
     
-    //     fetchAndRefreshChart();
+        fetchAndRefreshChart();
     
-    //     // Set up a timer to refresh the chart periodically (e.g., every 30 seconds)
-    //     setInterval(fetchAndRefreshChart, 30000);
-    // });
+        // Set up a timer to refresh the chart periodically (e.g., every 30 seconds)
+        setInterval(fetchAndRefreshChart, 30000);
+    });
 
     // // Production details ============== //
 

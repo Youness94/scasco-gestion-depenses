@@ -21,13 +21,13 @@
 
 
         <div class="row">
-            <div class="col-xl-4 col-sm-6 col-12 d-flex">
+            <div class="col-xl-6 col-sm-6 col-12 d-flex">
                 <div class="card bg-comman w-100">
                     <div class="card-body">
                         <div class="db-widgets d-flex justify-content-between align-items-center">
                             <div class="db-info">
-                                <h6>Productions</h6>
-                                <!-- <h3></h3> -->
+                                <h6>Réglements Par Cheques</h6>
+                                <h3>{{$totalReglementCheque }}</h3>
                             </div>
                             <!-- <div class="db-icon">
                                 <img src="assets/img/icons/dash-icon-02.svg" alt="Dashboard Icon">
@@ -36,32 +36,16 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-4 col-sm-6 col-12 d-flex">
+            <div class="col-xl-6 col-sm-6 col-12 d-flex">
                 <div class="card bg-comman w-100">
                     <div class="card-body">
                         <div class="db-widgets d-flex justify-content-between align-items-center">
                             <div class="db-info">
-                                <h6>Sinistres AT&RD</h6>
-                                <!-- <h3></h3> -->
+                                <h6>Réglements Par Effets</h6>
+                                <h3>{{$totalReglementEffet }}</h3>
                             </div>
                             <!-- <div class="db-icon">
                                 <img src="assets/img/icons/dash-icon-01.svg" alt="Dashboard Icon">
-                            </div> -->
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-xl-4 col-sm-6 col-12 d-flex">
-                <div class="card bg-comman w-100">
-                    <div class="card-body">
-                        <div class="db-widgets d-flex justify-content-between align-items-center">
-                            <div class="db-info">
-                                <h6>Sinistres Dim</h6>
-                                <!-- <h3></h3> -->
-                            </div>
-                            <!-- <div class="db-icon">
-                                <img src="assets/img/icons/dash-icon-03.svg" alt="Dashboard Icon">
                             </div> -->
                         </div>
                     </div>
@@ -84,19 +68,19 @@
                     <div class="card-header">
                         <div class="row align-items-center">
                             <div class="col-6">
-                                <h5 class="card-title">Nombre de Productions</h5>
+                                <h5 class="card-title">Réglements par cheques</h5>
                             </div>
                             <div class="col-6">
                                 @if (Session::get('role_name') === 'Super Admin')
                                 <ul class="chart-list-out">
-                                    <a href="#">Plus de détails</a>
+                                    <!-- <a href="#">Plus de détails</a> -->
                                 </ul>
                                 @endif
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div id="monthlyProductionChart"></div>
+                        <div id="monthlyReglemetCheque"></div>
                     </div>
                 </div>
             </div>
@@ -110,47 +94,25 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h5 class="card-title">Nombre de Sinistres Dim</h5>
+                                    <h5 class="card-title">Réglements par effets</h5>
                                 </div>
                                 <div class="col-6">
                                     @if (Session::get('role_name') === 'Super Admin')
                                     <ul class="chart-list-out">
-                                        <a href="#">Plus de détails</a>
+                                        <!-- <a href="#">Plus de détails</a> -->
                                     </ul>
                                     @endif
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
-                            <div id="monthlySinistresDimChart"></div>
+                            <div id="monthlyReglemetEffet"></div>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row">
-                <div class="col-md-12 col-lg-12">
-                    <div class="card card-chart">
-                        <div class="card-header">
-                            <div class="row align-items-center">
-                                <div class="col-6">
-                                    <h5 class="card-title">Nombre de Sinistres AT&RD</h5>
-                                </div>
-                                <div class="col-6">
-                                    @if (Session::get('role_name') === 'Super Admin')
-                                    <ul class="chart-list-out">
-                                        <a href="#">Plus de détails</a>
-                                    </ul>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-body">
-                            <div id="monthlySinistresAtRdChart"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
 
             <!-- =================================== -->
             <div class="row">
@@ -159,11 +121,11 @@
                         <div class="card-header">
                             <div class="row align-items-center">
                                 <div class="col-6">
-                                    <h5 class="card-title">Total des courriers</h5>
+                                    <h5 class="card-title">Total des Réglements</h5>
                                 </div>
                                 <div class="col-6">
                                     <ul class="chart-list-out">
-                                        <li class="star-menus"><a href="javascript:;"><i class="fas fa-ellipsis-v"></i></a></li>
+                                        <!-- <li class="star-menus"><a href="javascript:;"><i class="fas fa-ellipsis-v"></i></a></li> -->
                                     </ul>
                                 </div>
                             </div>
@@ -184,43 +146,54 @@
             <div class="col-xl-12 d-flex">
                 <div class="card flex-fill student-space comman-shadow">
                     <div class="card-header d-flex align-items-center">
-                        <h5 class="card-title">Productions</h5>
+                        <h5 class="card-title">Réglements par cheques</h5>
                         <ul class="chart-list-out student-ellips">
-                            <a href="#">Tous les productions</a>
+                            <a href="{{ route('all.reglement-cheques') }}">Tous les réglements par cheques</a>
                         </ul>
                     </div>
                     <div class="card-body">
+                        @if(count($reglement_cheque) > 0)
                         <div class="table-responsive">
                             <table class="table star-student table-hover table-center table-borderless table-striped">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>#</th>
-                                        <th>Date de Réception</th>
-                                        <th>Nom de police</th>
-                                        <th>Numero Sinistre</th>
-                                        <th>Nom Assuré</th>
-                                        <th>Nom de Victime</th>
-                                        <th>Branche</th>
-                                        <th>Compagnie</th>
-                                        <th>Acte de gestion</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Date de règlement</th>
+                                        <th scope="col">N de chèque</th>
+                                        <th scope="col">Compte</th>
+                                        <th scope="col">Bénéficiaire</th>
+                                        <th scope="col">Service</th>
+                                        <th scope="col">Référence</th>
+                                        <th scope="col">Échéance</th>
+                                        <th scope="col">Montant</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @forelse ($reglement_cheque->sortByDesc('date_reglement')->take(5) as $reglement)
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>{{ $reglement->id }}</td>
+                                        <td>{{ $reglement->date_reglement }}</td>
+                                        <td>{{ $reglement->cheque->number }}</td>
+                                        <td>{{ $reglement->compte->nom }}</td>
+                                        <td>{{ $reglement->bene->nom }}</td>
+                                        <td>{{ $reglement->service->nom }}</td>
+                                        <td>{{ $reglement->referance }}</td>
+                                        <td>{{ $reglement->echeance }}</td>
+                                        <td>{{ number_format(($reglement->montant ?? 0.00), 2) }}</td>
                                     </tr>
+                                    @empty
+                                    <!-- Handle the case where there are no records -->
+                                    <tr>
+                                        <td colspan="9">No records found.</td>
+                                    </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
-
+                        @else
+                        <!-- Handle the case where there are no records -->
+                        <p>No records found.</p>
+                        @endif
                     </div>
                 </div>
             </div>
@@ -230,88 +203,60 @@
             <div class="col-xl-12 d-flex">
                 <div class="card flex-fill student-space comman-shadow">
                     <div class="card-header d-flex align-items-center">
-                        <h5 class="card-title">Sinistre AT&RD</h5>
+                        <h5 class="card-title">Réglements par cheques</h5>
                         <ul class="chart-list-out student-ellips">
-                            <a href="#">Tous les sinistres AT&RD</a>
+                            <a href="{{ route('all.reglement-effets') }}">Tous les réglements par cheques</a>
                         </ul>
                     </div>
                     <div class="card-body">
+                        @if(count($reglement_effet) > 0)
                         <div class="table-responsive">
                             <table class="table star-student table-hover table-center table-borderless table-striped">
                                 <thead class="thead-light">
                                     <tr>
-                                        <th>#</th>
-                                        <th>Date de Réception</th>
-                                        <th>Nom de police</th>
-                                        <th>Numero Sinistre</th>
-                                        <th>Nom Assuré</th>
-                                        <th>Nom de Victime</th>
-                                        <th>Branche</th>
-                                        <th>Compagnie</th>
-                                        <th>Acte de gestion</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Date de règlement</th>
+                                        <th scope="col">N de effet</th>
+                                        <th scope="col">Compte</th>
+                                        <th scope="col">Bénéficiaire</th>
+                                        <th scope="col">Service</th>
+                                        <th scope="col">Sous Compte</th>
+                                        <th scope="col">Référence</th>
+                                        <th scope="col">Échéance</th>
+                                        <th scope="col">Montant</th>
                                     </tr>
                                 </thead>
                                 <tbody>
+                                    @forelse ($reglement_effet->sortByDesc('date_reglement')->take(5) as $reglement)
                                     <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
+                                        <td>{{ $reglement->id }}</td>
+                                        <td>{{ $reglement->date_reglement }}</td>
+                                        <td>{{ $reglement->effet->effet_number }}</td>
+                                        <td>{{ $reglement->effet_compte->nom }}</td>
+                                        <td>{{ $reglement->bene->nom }}</td>
+                                        <td>{{ $reglement->service->nom }}</td>
+                                        <td>
+                                            @foreach ($reglement->reglementEffetFournisseur as $reglementFournisseur)
+                                            {{ $reglementFournisseur->sousCompte->nom ?? 'N/V'}}
+                                            @endforeach
+                                        </td>
+                                        <td>{{ $reglement->referance }}</td>
+                                        <td>{{ $reglement->echeance }}</td>
+                                        <td>{{ number_format(($reglement->montant ?? 0.00),2)}}</td>
                                     </tr>
+                                    @empty
+                                    <!-- Handle the case where there are no records -->
+                                    <tr>
+                                        <td colspan="9">No records found.</td>
+                                    </tr>
+                                    @endforelse
                                 </tbody>
                             </table>
                         </div>
-
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col-xl-12 d-flex">
-                <div class="card flex-fill student-space comman-shadow">
-                    <div class="card-header d-flex align-items-center">
-                        <h5 class="card-title">Sinistre DIM</h5>
-                        <ul class="chart-list-out student-ellips">
-                            <a href="#">Tous les sinistres DIM</a>
-                        </ul>
-                    </div>
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table star-student table-hover table-center table-borderless table-striped">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th>#</th>
-                                        <th>Date de Réception</th>
-                                        <th>Nom de police</th>
-                                        <th>Numero Sinistre</th>
-                                        <th>Nom Assuré</th>
-                                        <th>Nom de Victime</th>
-                                        <th>Branche</th>
-                                        <th>Compagnie</th>
-                                        <th>Acte de gestion</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                        <td></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
+                        @else
+                        <!-- Handle the case where there are no records -->
+                        <p>No records found.</p>
+                        @endif
                     </div>
                 </div>
             </div>

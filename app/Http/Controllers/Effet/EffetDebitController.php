@@ -79,13 +79,13 @@ class EffetDebitController extends Controller
                 $query->doesntHave('effetDebit')
                     ->doesntHave('effetAnnule');
             })
-            ->orWhere('id', $effet_debit->check_id)
+            ->orWhere('id', $effet_debit->effet_id)
             ->with(['carnet_effet', 'reglementEffet'])
             ->get();
 
 
         foreach ($effets as $effet) {
-            Log::info(['Check Info' => $effet->toArray(), 'effet Debit Info' => $effet_debit->toArray()]);
+            Log::info(['Check Info' => $effet->reglementEffet->montant]);
         }
 
         return view('effets_debits.edit_effet_debit', compact('effets', 'effet_debit'));
@@ -107,19 +107,19 @@ class EffetDebitController extends Controller
 
         $effet_debit = EffetDebit::findOrFail($id);
 
-        foreach ($request->input('check_id') as $effetId) {
+        foreach ($request->input('effet_id') as $effetId) {
             $effet = Effet::find($effetId);
 
             $effet_debit->update([
                 'effet_sie_debit' => $effet->carnet_effet->effet_sie,
                 'effet_id' => $effetId,
-                'series_debit' => $effet->carnet_effet->carnet_series,
-                'banque_debit' => $effet->carnet_effet->bank->nom,
-                'compte_debit' => $effet->reglementEffet->effet_compte->nom,
-                'reference_debit' => $effet->reglementEffet->referance,
-                'service_debit' => $effet->reglementEffet->service->nom,
-                'beneficiare_debit' => $effet->reglementEffet->bene->nom,
-                'amount_debit' => $effet->reglementEffet->montant,
+                'effet_series_debit' => $effet->carnet_effet->carnet_series,
+                'effet_banque_debit' => $effet->carnet_effet->bank->nom,
+                'effet_compte_debit' => $effet->reglementEffet->effet_compte->nom,
+                'effet_reference_debit' => $effet->reglementEffet->referance,
+                'effet_service_debit' => $effet->reglementEffet->service->nom,
+                'effet_beneficiare_debit' => $effet->reglementEffet->bene->nom,
+                'effet_amount_debit' => $effet->reglementEffet->montant,
             ]);
 
             $this->handleFileUpload($request, 'public/photos/effets_debit', EffetDebitImage::class, 'effet_debit_id', $effet_debit->id);

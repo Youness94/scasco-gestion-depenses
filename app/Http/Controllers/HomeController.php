@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Production;
+use App\Models\ReglementCheque;
+use App\Models\ReglementEffet;
 use App\Models\Sinistre;
 use App\Models\SinistreDim;
 use App\Models\User;
@@ -34,59 +36,48 @@ class HomeController extends Controller
     /** home dashboard */
     public function index()
     {
-        // $productions = Production::with('branches', 'compagnies', 'act_gestions', 'charge_comptes')->get();
-        // $sinistres_dim = SinistreDim::with('branches_dim', 'compagnies', 'acte_de_gestion_dim', 'charge_compte_dim')->get();
-        // $sinistres = Sinistre::with('branches_sinistres', 'compagnies', 'acte_de_gestion_sinistres', 'charge_compte_sinistres')->get();
-        // $totalProduction = Production::count(); 
-        // $totalSinistreDim = SinistreDim::count();
-        // $totalSinistreAt_Rd = Sinistre::count();
+        $reglement_cheque = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages', 'reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->get();
+        $reglement_effet = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelEffetImages', 'reglementEffetFournisseur'])->orderBy('created_at', 'desc')->get();
+        $totalReglementCheque = ReglementCheque::count(); 
+        $totalReglementEffet = ReglementEffet::count();
         $users = User::latest()->get();
         // $users = User::all();
-        return view('dashboard.accueil', compact('users') );
+        return view('dashboard.accueil', compact('users', 'reglement_cheque', 'reglement_effet','totalReglementCheque', 'totalReglementEffet') );
     }
 
     // =============
-//     public function fetchMonthlyProductionData()
-// {
-//     $production = Production::selectRaw('MONTHNAME(date_reception) as month, COUNT(*) as count')
-//         ->groupByRaw('MONTHNAME(date_reception)')
-//         ->orderByRaw('STR_TO_DATE(CONCAT(MONTH(date_reception), " 1"), "%m %d")')
-//         ->get();
+    public function fetchMonthlyReglementCheque()
+{
+    $reglement_cheque = ReglementCheque::selectRaw('MONTHNAME(date_reglement) as month, COUNT(*) as count')
+        ->groupByRaw('MONTHNAME(date_reglement)')
+        ->orderByRaw('STR_TO_DATE(CONCAT(MONTH(date_reglement), " 1"), "%m %d")')
+        ->get();
 
-//     return response()->json($production);
-// }
+    return response()->json($reglement_cheque);
+}
 
 
-//     public function fetchMonthlySinistresDimData()
-//     {
-//         $sinistres_dim = SinistreDim::selectRaw('MONTHNAME(date_reception) as month, COUNT(*) as count')
-//             ->groupByRaw('MONTHNAME(date_reception)')
-//             ->orderByRaw('MONTH(date_reception)')
-//             ->get();
+    public function fetchMonthlyReglementEffet()
+    {
+        $reglement_effet = ReglementEffet::selectRaw('MONTHNAME(date_reglement) as month, COUNT(*) as count')
+            ->groupByRaw('MONTHNAME(date_reglement)')
+            ->orderByRaw('MONTH(date_reglement)')
+            ->get();
     
-//         return response()->json($sinistres_dim);
-//     }
-//     public function fetchMonthlySinistresAtRdData()
-//     {
-//         $sinistres_at_rd = Sinistre::selectRaw('MONTHNAME(date_reception) as month, COUNT(*) as count')
-//             ->groupByRaw('MONTHNAME(date_reception)')
-//             ->orderByRaw('MONTH(date_reception)')
-//             ->get();
-    
-//         return response()->json($sinistres_at_rd);
-//     }
+        return response()->json($reglement_effet);
+    }
 
-//     public function pieChart()
-// {
-//     $productionCount = Production::count();
-//     $sinistreCount = Sinistre::count();
-//     $sinistreDimCount = SinistreDim::count();
 
-//     return response()->json([
-//         'labels' => ['Productions', 'Sinistres AT&RD', 'Sinistres DIM'],
-//         'values' => [$productionCount, $sinistreCount, $sinistreDimCount], // Changed 'data' to 'values'
-//     ]);
-// }
+    public function pieChart()
+{
+    $reglement_cheque_count = ReglementCheque::count();
+    $reglement_effet_count = ReglementEffet::count();
+
+    return response()->json([
+        'labels' => ['Réglements Par Cheques', 'Réglements Par Effets'],
+        'values' => [$reglement_cheque_count, $reglement_effet_count],
+    ]);
+}
 
 
 

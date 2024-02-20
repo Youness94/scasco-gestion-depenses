@@ -35,18 +35,45 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="row mx-3 mt-10 pt-100">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Description</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Date d'affectation</td>
+                                        <td>{{$effet_affectation->affectation_date }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Série de chequier</td>
+                                        <td> {{ $effet_affectation->carnet_effet->carnet_series }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Numéro de premier chèque</td>
+                                        <td>{{ $effet_affectation->start_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Numéro de dernier chèque</td>
+                                        <td>{{ $effet_affectation->end_number }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Service</td>
+                                        <td>{{ $effet_affectation->service->nom }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Courtier</td>
+                                        <td>{{ $effet_affectation->courtier->nom }}</td>
+                                    </tr>
 
-                        <div class="card-body">
-                            <p><strong>Affectation Date:</strong> {{ $effet_affectation->affectation_date }}</p>
-                            <p><strong>Checkbook:</strong> {{ $effet_affectation->carnet_effet->carnet_series }}</p>
-                            <p><strong>Start Number:</strong> {{ $effet_affectation->start_number }}</p>
-                            <p><strong>End Number:</strong> {{ $effet_affectation->end_number }}</p>
-                            <p><strong>Service:</strong> {{ $effet_affectation->service->nom }}</p>
-                            <p><strong>Courtier:</strong> {{ $effet_affectation->courtier->nom }}</p>
+                                </tbody>
+                            </table>
 
-
-                            
-                            <div class="mt-4">
+                        </div>
+                        <div class="mt-4">
                                 <p><strong>Images:</strong></p>
                                 <div class="row" style="cursor:pointer;">
                                     @foreach($effet_affectation->images as $image)
@@ -62,8 +89,9 @@
                                     @endforeach
                                 </div>
                             </div>
-                          
-                        </div>
+                        <div class="card-footer bg-black"></div>
+
+                        
                     </div>
                 </div>
             </div>
