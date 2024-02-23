@@ -36,8 +36,18 @@
 
                         <div class="page-header">
                             <div class="row align-items-center">
-                                <div class="col">
+                            <div class="col-md-5">
                                     <h3 class="page-title">Réglements des chèques</h3>
+                                </div>
+                                <div class="col-md-5 mt-1">
+                                <form action="{{ route('reglement_cheque.search') }}" method="GET" >
+                                        @csrf
+                                        <div class="input-group">
+                                    <input type="text" class="form-control" name="search" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
+                                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                                    <a href="{{ route('all.reglement-cheques') }}" class="btn btn-outline-secondary" aria-describedby="button-addon2"><i class="fa">&#xf021;</i></a>
+                                    </div>
+                                    </form>
                                 </div>
                                 <div class="col-auto text-end float-end ms-auto download-grp">
                                     <!-- <a href="#" class="btn btn-outline-primary me-2"><i

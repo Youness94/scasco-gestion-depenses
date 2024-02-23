@@ -36,6 +36,57 @@ class ReglementChequeController extends Controller
         return view('reglement_cheques.list-reglement-cheque', compact('reglements'));
     }
 
+    public function search_reglement_cheque(Request $request)
+    {
+        $search = $request->search;
+
+        $reglements = ReglementCheque::where(function ($query) use ($search) {
+            $query->where('echeance', 'like', '%' . $search . '%')
+                ->orWhere('referance', 'like', '%' . $search . '%')
+                ->orWhere('montant', 'like', '%' . $search . '%');
+        })
+            ->orWhereHas('reglementSiniAuto', function ($query) use ($search) {
+                $query->whereHas('companier', function ($subquery) use ($search) {
+                    $subquery->where('nom', 'like', '%' . $search . '%');
+                })
+                    ->orWhere('referance_quittance_auto', 'like', '%' . $search . '%')
+                    ->orWhere('referance_dossier_auto', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('reglementCltRistourne', function ($query) use ($search) {
+                $query->whereHas('companier', function ($subquery) use ($search) {
+                    $subquery->where('nom', 'like', '%' . $search . '%');
+                })
+                ->orWhere('referance_diam', 'like', '%' . $search . '%')
+                ->orWhere('referance_cie', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('reglementRdp', function ($query) use ($search) {
+                $query->whereHas('companier', function ($subquery) use ($search) {
+                    $subquery->where('nom', 'like', '%' . $search . '%');
+                })
+                    ->orWhere('referance_quittance', 'like', '%' . $search . '%')
+                    ->orWhere('referance_dossier', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('reglementFournisseur', function ($query) use ($search) {
+                $query->whereHas('sousCompte', function ($subquery) use ($search) {
+                    $subquery->where('nom', 'like', '%' . $search . '%');
+                });
+            })
+            ->orWhereHas('cheque', function ($query) use ($search) {
+                $query->where('number', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('compte', function ($query) use ($search) {
+                $query->where('nom', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('bene', function ($query) use ($search) {
+                $query->where('nom', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('service', function ($query) use ($search) {
+                $query->where('nom', 'like', '%' . $search . '%');
+            })
+            ->get();
+
+        return view('reglement_cheques.list-reglement-cheque', compact('reglements', 'search'));
+    }
     public function AddReglementCheque()
     {
 
@@ -395,79 +446,79 @@ class ReglementChequeController extends Controller
     }
 
 
-    
+
     public function generateReglementChequePDF($id)
-{
-    $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages', 'reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);
-    $date_reglement = $reglements->date_reglement;
+    {
+        $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages', 'reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);
+        $date_reglement = $reglements->date_reglement;
 
 
-    $images = $reglements->RelChequeImages;
-    $imagePaths = [];
+        $images = $reglements->RelChequeImages;
+        $imagePaths = [];
 
-    foreach ($images as $image) {
-        $imagePaths[] = public_path("public/reglement_cheque_images/{$image->images}");
-    }
-
-    $imageDirectory = 'reglement_cheque_images/';
-
-    // Create the directory if it doesn't exist
-    if (!file_exists(public_path($imageDirectory))) {
-        mkdir(public_path($imageDirectory), 0755, true);
-    }
-
-    // Copy images to the specified directory
-    foreach ($imagePaths as $imagePath) {
-        if (file_exists($imagePath)) {
-            $imageName = basename($imagePath);
-            $newImagePath = public_path("{$imageDirectory}{$imageName}");
-            copy($imagePath, $newImagePath);
-        } else {
-            Log::error("Image not found at path: {$imagePath}");
+        foreach ($images as $image) {
+            $imagePaths[] = public_path("public/reglement_cheque_images/{$image->images}");
         }
-    }
 
-    // Define the PDF file name
-    $pdfFileName = "reglement_cheque_$date_reglement.pdf";
+        $imageDirectory = 'reglement_cheque_images/';
 
-    // Load PDF view with image links
-    $pdf = PDF::loadView('pdf.reglement_cheque_pdf', [
-        'title' => $date_reglement,
-        'date' => date('m/d/Y'),
-        'imagePaths' => $imagePaths,
-        'reglements' => $reglements
-    ])->setPaper('a4');
+        // Create the directory if it doesn't exist
+        if (!file_exists(public_path($imageDirectory))) {
+            mkdir(public_path($imageDirectory), 0755, true);
+        }
 
-    // Save the PDF file within the 'public' directory
-    $pdf->save(public_path("pdf/$pdfFileName"));
-
-    // Create a zip archive
-    $zipFileName = "reglement_cheque_$date_reglement.zip";
-    $zipFilePath = public_path("pdf/$zipFileName");
-    $zip = new ZipArchive();
-    
-    if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-        // Add PDF file to the zip archive
-        $zip->addFile(public_path("pdf/$pdfFileName"), $pdfFileName);
-
-        // Add images to the zip archive
+        // Copy images to the specified directory
         foreach ($imagePaths as $imagePath) {
             if (file_exists($imagePath)) {
                 $imageName = basename($imagePath);
-                $zip->addFile($imagePath, "{$imageDirectory}{$imageName}");
+                $newImagePath = public_path("{$imageDirectory}{$imageName}");
+                copy($imagePath, $newImagePath);
             } else {
                 Log::error("Image not found at path: {$imagePath}");
             }
         }
 
-        // Close the zip archive
-        $zip->close();
+        // Define the PDF file name
+        $pdfFileName = "reglement_cheque_$date_reglement.pdf";
 
-        // Response with download link
-        return response()->download($zipFilePath);
-    } else {
-        Log::error("Failed to open zip archive");
-        return response()->json(['error' => 'Failed to create zip archive'], 500);
+        // Load PDF view with image links
+        $pdf = PDF::loadView('pdf.reglement_cheque_pdf', [
+            'title' => $date_reglement,
+            'date' => date('m/d/Y'),
+            'imagePaths' => $imagePaths,
+            'reglements' => $reglements
+        ])->setPaper('a4');
+
+        // Save the PDF file within the 'public' directory
+        $pdf->save(public_path("pdf/$pdfFileName"));
+
+        // Create a zip archive
+        $zipFileName = "reglement_cheque_$date_reglement.zip";
+        $zipFilePath = public_path("pdf/$zipFileName");
+        $zip = new ZipArchive();
+
+        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+            // Add PDF file to the zip archive
+            $zip->addFile(public_path("pdf/$pdfFileName"), $pdfFileName);
+
+            // Add images to the zip archive
+            foreach ($imagePaths as $imagePath) {
+                if (file_exists($imagePath)) {
+                    $imageName = basename($imagePath);
+                    $zip->addFile($imagePath, "{$imageDirectory}{$imageName}");
+                } else {
+                    Log::error("Image not found at path: {$imagePath}");
+                }
+            }
+
+            // Close the zip archive
+            $zip->close();
+
+            // Response with download link
+            return response()->download($zipFilePath);
+        } else {
+            Log::error("Failed to open zip archive");
+            return response()->json(['error' => 'Failed to create zip archive'], 500);
+        }
     }
-}
 }

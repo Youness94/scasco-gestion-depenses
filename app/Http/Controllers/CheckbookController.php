@@ -18,6 +18,24 @@ class CheckbookController extends Controller
         return view('checkbooks.list-checkbook', compact('checkbooks')); //
     }
 
+    public function search_checkbook(Request $request)
+    {
+        $search = $request->search;
+    
+        $checkbooks = Checkbook::where(function ($query) use ($search) {
+            $query->where('reception_date', 'like', '%' . $search . '%')
+                ->orWhere('series', 'like', '%' . $search . '%')
+                ->orWhere('quantity', 'like', '%' . $search . '%');
+        })
+            ->orWhereHas('bank', function ($query) use ($search) {
+                $query->where('nom', 'like', '%' . $search . '%');
+            })
+            ->get();
+    
+            return view('checkbooks.list-checkbook', compact('checkbooks', 'search'));
+    }
+
+
     public function AddCheckbook()
     {
         if (auth()->check()) {
@@ -125,7 +143,6 @@ public function updateValidation($id)
         $cbkId = $request->id;
         $checkbook = Checkbook::findOrFail($cbkId);
     
-        // Dynamically generate the series based on reception_date
         $formattedDate = Carbon::parse($request->reception_date)->format('dmY');
         $series = $formattedDate . '01';
     
@@ -195,52 +212,3 @@ public function updateValidation($id)
 
 
 
-// public function updateChweckbook(Request $request, $id)
-// {
-//     if (auth()->check()) {
-//         $validatedData = $request->validate([
-//             'reception_date' => 'nullable|date_format:Y-m-d',
-//             'bank_id' => 'required|exists:banks,id',
-//             'cheque_sie' => 'nullable|string',
-//             'start_number' => 'nullable|integer',
-//             'quantity' => 'nullable|integer',
-//         ]);
-
-//         $checkbook = Checkbook::findOrFail($id);
-
-//         // Dynamically generate the series based on reception_date
-//         $formattedDate = Carbon::parse($validatedData['reception_date'])->format('dmY');
-//         $series = $formattedDate . '01';
-
-//         $lastCheckbook = Checkbook::whereDate('reception_date', '=', $validatedData['reception_date'])->latest()->first();
-
-//         if ($lastCheckbook) {
-//             // If there is an existing checkbook for the specified date, increment the series by 1
-//             $lastSeriesNumber = (int) substr($lastCheckbook->series, -2) + 1;
-//             $series = $formattedDate . str_pad($lastSeriesNumber, 2, '0', STR_PAD_LEFT);
-//         }
-
-//         $checkbookData = array_merge($validatedData, [
-//             'series' => $series,
-//             // 'user_id' => $request->user()->id,
-//             'user_id' => auth()->user()->id,
-//         ]);
-
-//         // If start_number or quantity is changed, delete the previous checks and create a new one
-//         if ($checkbook->start_number != $validatedData['start_number'] || $checkbook->quantity != $validatedData['quantity']) {
-//             $checkbook->checks()->delete();
-//             $checkbook->delete();
-
-//             // $checkbook = Checkbook::create($checkbookData);
-//         } else {
-//             $checkbook->update($checkbookData);
-//         }
-
-//         // Update checks if necessary, depending on your requirements
-
-//         return redirect('/tous/checkbooks')->with('success', 'Checkbook updated successfully');
-//     } else {
-//         // User is not authenticated, redirect to the login page
-//         return redirect('/login')->with('error', 'Vous devez être connecté pour effectuer cette action');
-//     }
-// }

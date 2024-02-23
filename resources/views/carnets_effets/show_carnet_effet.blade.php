@@ -43,7 +43,7 @@
                   <th>Sèrie d'effet</th>
                   <th>Effet Sie</th>
                   <th>Numéro d'effet</th>
-                  <th>Status</th>
+                  <!-- <th>Status</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -53,13 +53,13 @@
                     <td>{{ $carnet_effet->carnet_series }}</td>
                     <td>{{ $carnet_effet->effet_sie }}</td>
                     <td>{{ $i }}</td>
-                    <td>
+                    <!-- <td>
                       @foreach ($carnet_effet->effets as $effet)
                       @if ($effet->effet_number == $i)
                       {{ $effet->status }}
                       @endif
                       @endforeach
-                    </td>
+                    </td> -->
                   </tr>
                   @endfor
               </tbody>

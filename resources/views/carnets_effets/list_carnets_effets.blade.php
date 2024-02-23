@@ -34,8 +34,18 @@
 
                         <div class="page-header">
                             <div class="row align-items-center">
-                                <div class="col">
-                                    <h3 class="page-title">Chéquiers</h3>
+                            <div class="col-md-5">
+                                    <h3 class="page-title">Effets</h3>
+                                </div>
+                                <div class="col-md-4 mt-2">
+                                    <form action="{{ route('carnet_effet.search') }}" method="GET" >
+                                        @csrf
+                                        <div class="input-group">
+                                            <input type="text" class="form-control" name="search" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
+                                            <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                                            <a href="{{ route('all.carnets-effets') }}" class="btn btn-outline-secondary" aria-describedby="button-addon2"><i class="fa">&#xf021;</i></a>
+                                        </div>
+                                    </form>
                                 </div>
                                 <div class="col-auto text-end float-end ms-auto download-grp">
                                     <a href="{{ route('add.carnet-effet') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>

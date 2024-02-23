@@ -26,6 +26,36 @@ class ReglementEffetController extends Controller
         return view('reglement_effets.list-reglement-effets', compact('reglements'));
     }
 
+    public function search_reglement_effet(Request $request)
+    {
+        $search = $request->search;
+    
+        $reglements = ReglementEffet::where(function ($query) use ($search) {
+            $query->where('echeance', 'like', '%' . $search . '%')
+                ->orWhere('referance', 'like', '%' . $search . '%')
+                ->orWhere('montant', 'like', '%' . $search . '%');
+        })
+        ->orWhereHas('reglementEffetFournisseur', function ($query) use ($search) {
+            $query->whereHas('sousCompte', function ($subquery) use ($search) {
+                $subquery->where('nom', 'like', '%' . $search . '%');
+            });
+        })
+            ->orWhereHas('effet', function ($query) use ($search) {
+                $query->where('effet_number', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('effet_compte', function ($query) use ($search) {
+                $query->where('nom', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('bene', function ($query) use ($search) {
+                $query->where('nom', 'like', '%' . $search . '%');
+            })
+            ->orWhereHas('service', function ($query) use ($search) {
+                $query->where('nom', 'like', '%' . $search . '%');
+            })
+            ->get();
+    
+            return view('reglement_effets.list-reglement-effets', compact('reglements', 'search'));
+    }
     public function AddReglementEffet()
     {
 

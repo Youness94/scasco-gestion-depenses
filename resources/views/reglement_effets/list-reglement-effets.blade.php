@@ -8,10 +8,10 @@
         <div class="page-header">
             <div class="row align-items-center">
                 <div class="col">
-                    <h3 class="page-title">Réglements des chèques</h3>
+                    <h3 class="page-title">Réglements des effets</h3>
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('accueil') }}">Tableau de Bord</a></li>
-                        <li class="breadcrumb-item active">Réglements des chèques</li>
+                        <li class="breadcrumb-item active">Réglements des effets</li>
                     </ul>
                 </div>
             </div>
@@ -36,13 +36,19 @@
 
                         <div class="page-header">
                             <div class="row align-items-center">
-                                <div class="col">
-                                    <h3 class="page-title">Réglements des chèques</h3>
+                            <div class="col-md-5">
+                                    <h3 class="page-title">Réglements des effets</h3>
                                 </div>
-                                <div class="col">
-                                        <!-- <label for="searchInput" class="form-label">Recherche:</label> -->
-                                        <input type="text" class="form-control" id="searchInput" placeholder="Entrez un mot clé">
+                                <div class="col-md-5 mt-1">
+                                <form action="{{ route('reglement_effet.search') }}" method="GET" >
+                                        @csrf
+                                        <div class="input-group">
+                                    <input type="text" class="form-control" name="search" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
+                                    <button class="btn btn-outline-secondary" type="submit" id="button-addon2">Search</button>
+                                    <a href="{{ route('all.reglement-effets') }}" class="btn btn-outline-secondary" aria-describedby="button-addon2"><i class="fa">&#xf021;</i></a>
                                     </div>
+                                    </form>
+                                </div>
                                 <div class="col-auto text-end float-end ms-auto download-grp">
                                     <!-- <a href="#" class="btn btn-outline-primary me-2"><i
                                             class="fas fa-download"></i> Télécharger</a> -->

@@ -138,6 +138,8 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         Route::get('/modifier/carnet-effet/{id}', 'EditCarnetEffet')->name('edit.carnet-effet');
         Route::post('/update/carnet-effet/{id}', 'UpdateCarnetEffet')->name('update.carnet-effet');
         Route::get('/supprimer/carnet-effet/{id}', 'DeleteCarnetEffet')->name('delete.carnet-effet');
+
+        Route::get('/search/carnet-effet', 'search_carnet_effet')->name('carnet_effet.search');
     });
     Route::controller(EffetServiceController::class)->group(function () {
         Route::get('/tous/effet-services', 'AllEffetServices')->name('all.effet-services');
@@ -178,7 +180,7 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         // Route::get('/ajouter/reglement-cheque-test', 'testFunction')->name('ajouter.reglement-cheque-test');
         
         Route::get('/download-reglement-effet-pdf/{id}', 'generateReglementEffetPDF')->name('download.reglement.effet.pdf');
-
+        Route::get('/search/reglement-effet', 'search_reglement_effet')->name('reglement_effet.search');
         // Route::get('/checkIfEffetSelected', 'checkIfEffetSelected')->name('checkIfEffetSelected');
     });
 
@@ -220,6 +222,8 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         Route::get('/supprimer/checkbook/{id}', 'DeleteCheckbook')->name('delete.checkbook');
 
         Route::get('/valider/checkbook/{id}', 'updateValidation')->name('checkbook.validation');
+
+        Route::get('/search/checkbook', 'search_checkbook')->name('checkbook.search');
     });
 
 
@@ -356,7 +360,7 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         // Route::get('/ajouter/reglement-cheque-test', 'testFunction')->name('ajouter.reglement-cheque-test');
         
         Route::get('/download-reglement-pdf/{id}', 'generateReglementChequePDF')->name('download.reglement.pdf');
-
+        Route::get('/search/reglement-cheque', 'search_reglement_cheque')->name('reglement_cheque.search');
         Route::get('/checkIfChequeSelected', 'checkIfChequeSelected')->name('checkIfChequeSelected');
     });
 });

@@ -18,6 +18,22 @@ class CarnetEffetController extends Controller
         return view('carnets_effets.list_carnets_effets', compact('carnets_effets')); //
     }
 
+    public function search_carnet_effet(Request $request)
+    {
+        $search = $request->search;
+    
+        $carnets_effets = CarnetEffet::where(function ($query) use ($search) {
+            $query->where('reception_date', 'like', '%' . $search . '%')
+                ->orWhere('carnet_series', 'like', '%' . $search . '%')
+                ->orWhere('effet_quantity', 'like', '%' . $search . '%');
+        })
+            ->orWhereHas('bank', function ($query) use ($search) {
+                $query->where('nom', 'like', '%' . $search . '%');
+            })
+            ->get();
+    
+            return view('carnets_effets.list_carnets_effets', compact('carnets_effets', 'search'));
+    }
     public function AddCarnetEffet()
     {
         if (auth()->check()) {
