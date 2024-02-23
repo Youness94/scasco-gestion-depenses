@@ -71,7 +71,7 @@
                                     
                                     <div class="col-12">
                                         <div class="student-submit">
-                                            <button type="submit" class="btn btn-primary">Ajouetr</button>
+                                            <button type="submit" class="btn btn-primary">Soumettre</button>
                                         </div>
                                     </div>
                                 </div>

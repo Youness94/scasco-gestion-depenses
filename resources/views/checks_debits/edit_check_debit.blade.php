@@ -46,7 +46,12 @@
                                                             @enderror
                                                       </div>
                                                 </div>
-
+                                                <div class="col-12 col-sm-4">
+                                                      <div class="form-group local-forms">
+                                                            <label for="date_debit" class="form-label">Date de debit:</label>
+                                                            <input type="date" class="form-control" id="date_debit" name="date_debit" value="{{$check_debit->date_debit}}">
+                                                      </div>
+                                                </div>
                                                 <div class="col-12 col-sm-4">
                                                       <div class="form-group local-forms">
                                                             <label for="cheque_sie_debit" class="form-label">Chèque Sie:</label>
@@ -107,7 +112,7 @@
                                                 </div>
                                                 <div class="col-12">
                                                       <div class="student-submit">
-                                                            <button type="submit" class="btn btn-primary">Ajouter</button>
+                                                            <button type="submit" class="btn btn-primary">Soumettre</button>
                                                       </div>
                                                 </div>
                                           </div>

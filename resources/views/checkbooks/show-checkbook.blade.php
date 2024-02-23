@@ -43,7 +43,7 @@
                   <th>Sèrie de Chèquier</th>
                   <th>Chèque Sie</th>
                   <th>Numéro de Chèque</th>
-                  <th>Status</th>
+                  <!-- <th>Status</th> -->
                 </tr>
               </thead>
               <tbody>
@@ -53,7 +53,7 @@
                     <td>{{ $checkbooks->series }}</td>
                     <td>{{ $checkbooks->cheque_sie }} {{ $i }}</td>
                     <td>{{ $checkbooks->cheque_sie }} {{ $i }}</td>
-                    <td>{{ $checkbooks->status }}</td> 
+                    <!-- <td>{{ $checkbooks->status }}</td>  -->
                   </tr>
                   @endfor
               </tbody>

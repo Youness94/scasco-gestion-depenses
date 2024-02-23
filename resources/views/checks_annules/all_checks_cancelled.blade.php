@@ -15,7 +15,7 @@
                               </ul>
                         </div>
                   </div>
-            </div> 
+            </div>
             @if(session('success'))
             <div class="alert alert-success">
                   {{ session('success') }}
@@ -45,7 +45,7 @@
                                     </div>
                                     <div class="table-responsive">
                                           <table class="table border-0  table-center mb-0 datatable table-striped">
-                                          <thead>
+                                                <thead>
                                                       <tr>
                                                             <th>#</th>
                                                             <th>Numéro de chéque</th>
@@ -66,10 +66,10 @@
                                                             <td>{{ $key + 1 }}</td>
                                                             <td>{{ $item->cheque_sie_annule }}{{ $item->check->number }}</td>
                                                             <td>{{ $item->series_checkbook_annule }}</td>
-                                                            <td>{{ $item->compte->nom}}</td>
-                                                            <td>{{ $item->service->nom }}</td>
-                                                            <td>{{ $item->benef->nom}}</td>
-                                                            <td>{{ $item->montant_annule}}</td>
+                                                            <td>{{ $item->compte ? $item->compte->nom : 'N/V' }}</td>
+                                                            <td>{{ $item->service ? $item->service->nom : 'N/V' }}</td>
+                                                            <td>{{ $item->benef ? $item->benef->nom : 'N/V' }}</td>
+                                                            <td>{{ $item->montant_annule ?? 'N/V' }}</td>
                                                             <td>{{ $item->bank_check_annule }}</td>
                                                             <td>
                                                                   @if ($item->ChequeAnnuleImages->isNotEmpty())

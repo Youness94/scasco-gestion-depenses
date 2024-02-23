@@ -17,16 +17,16 @@
             </div>
         </div>
         @if(session('success'))
-            <div class="alert alert-success">
-                  {{ session('success') }}
-            </div>
-            @endif
+        <div class="alert alert-success">
+            {{ session('success') }}
+        </div>
+        @endif
 
-            @if(session('error'))
-            <div class="alert alert-danger">
-                  {{ session('error') }}
-            </div>
-            @endif
+        @if(session('error'))
+        <div class="alert alert-danger">
+            {{ session('error') }}
+        </div>
+        @endif
         <div class="row">
             <div class="col-sm-12">
                 <div class="card card-table">
@@ -44,7 +44,7 @@
                         </div>
                         <div class="table-responsive">
                             <table class="table border-0  table-center mb-0 datatable table-striped">
-                            <thead>
+                                <thead>
                                     <tr>
 
                                         <th>#</th>
@@ -53,10 +53,11 @@
                                         <th>Numéro de départ</th>
                                         <th>Qnt des effets</th>
                                         <th>Banque</th>
-                                        <th>Status</th>
                                         <th>Afficher</th>
                                         <th>Modifier</th>
                                         <th>Supprimer</th>
+                                        <th>Valider</th>
+                                       
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,15 +70,42 @@
                                         <td>{{ $item->effet_sie }} {{ $item->effet_start_number }}</td>
                                         <td>{{$item->effet_quantity}}</td>
                                         <td>{{ optional($item->bank)->nom ?? 'N/A' }}</td>
-                                        <td>{{ $item->status }}</td>
                                         <td>
                                             <a href="{{route('show.carnet-effet',$item->id)}}" class=" btn btn-inverse-danger"><i class="feather-eye"></i></a>
                                         </td>
-                                        <td>
+                                        <!-- <td>
                                             <a href="{{route('edit.carnet-effet',$item->id)}}" class="btn btn-inverse-warning"><i class="feather-edit"></i></a>
                                         </td>
                                         <td>
                                             <a href="{{route('delete.carnet-effet',$item->id)}}" class=" btn btn-inverse-danger"><i class="feather-trash"></i></a>
+                                        </td> -->
+                                        @if ($item->validation ?? false)
+                                        <td>
+                                            <button class="btn btn-inverse-warning" disabled>
+                                                <i class="feather-edit"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-inverse-danger" disabled>
+                                                <i class="feather-trash"></i>
+                                            </button>
+                                        </td>
+                                        @else
+                                        <td>
+                                            <a href="{{route('edit.carnet-effet',$item->id)}}" class="btn btn-inverse-warning">
+                                                <i class="feather-edit"></i>
+                                            </a>
+                                        </td>
+                                        <td>
+                                            <a href="{{route('delete.carnet-effet',$item->id)}}" class="btn btn-inverse-danger">
+                                                <i class="feather-trash"></i>
+                                            </a>
+                                        </td>
+                                        @endif
+                                        <td>
+                                            <a href="{{ route('update.validation', $item->id) }}" class="btn btn-inverse-warning">
+                                            <i class="fa">&#xf078;</i>
+                                            </a>
                                         </td>
                                     </tr>
                                     @endforeach

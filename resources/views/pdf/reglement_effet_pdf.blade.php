@@ -71,6 +71,12 @@
                                     <th scope="row">Nom de echeance: </th>
                                     <td>{{ $reglements->echeance }}</td>
                               </tr>
+                              @foreach($reglements->reglementEffetFournisseur as $reglementEffetFournisseur)
+                              <tr>
+                              <td>Sous Compte</td>
+                                    <td> {{ $reglementEffetFournisseur->sousCompte->nom }}</td>
+                              </tr>
+                              @endforeach
                               <tr>
                                     <th scope="row">Nom de montant: </th>
                                     <td>{{ number_format($reglements->montant ?? 0.00)  }} Dh</td>

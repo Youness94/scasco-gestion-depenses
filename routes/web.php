@@ -134,8 +134,9 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         Route::get('/ajouter/carnet-effet', 'AddCarnetEffet')->name('add.carnet-effet');
         Route::post('/store/carnet-effet', 'StoreCarnetEffet')->name('store.carnet-effet');
         Route::get('/show/carnet-effet/{id}', 'ShowCarnetEffet')->name('show.carnet-effet');
+        Route::get('/valider/carnet-effet/{id}', 'updateValidation')->name('update.validation');
         Route::get('/modifier/carnet-effet/{id}', 'EditCarnetEffet')->name('edit.carnet-effet');
-        Route::post('/update/carnet-effet', 'UpdateCarnetEffet')->name('update.carnet-effet');
+        Route::post('/update/carnet-effet/{id}', 'UpdateCarnetEffet')->name('update.carnet-effet');
         Route::get('/supprimer/carnet-effet/{id}', 'DeleteCarnetEffet')->name('delete.carnet-effet');
     });
     Route::controller(EffetServiceController::class)->group(function () {
@@ -215,8 +216,10 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         Route::post('/store/checkbook', 'StoreCheckbook')->name('store.checkbook');
         Route::get('/show/checkbook/{id}', 'ShowCheckbook')->name('show.checkbook');
         Route::get('/modifier/checkbook/{id}', 'EditCheckbook')->name('edit.checkbook');
-        Route::post('/update/checkbook', 'UpdateCheckbook')->name('update.checkbook');
+        Route::post('/update/checkbook/{id}', 'UpdateCheckbook')->name('update.checkbook');
         Route::get('/supprimer/checkbook/{id}', 'DeleteCheckbook')->name('delete.checkbook');
+
+        Route::get('/valider/checkbook/{id}', 'updateValidation')->name('checkbook.validation');
     });
 
 

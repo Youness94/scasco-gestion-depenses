@@ -54,7 +54,7 @@ class EffetDebitController extends Controller
             $effetDebit = EffetDebit::create([
                 'effet_sie_debit' => $effet->carnet_effet->effet_sie,
                 'effet_id' => $effetId,
-                // 'check_id' => $check->number,
+                'date_debit_effet' => $request->input('date_debit_effet'),
                 'effet_series_debit' => $effet->carnet_effet->carnet_series,
                 'effet_banque_debit' => $effet->carnet_effet->bank->nom,
                 'effet_compte_debit' => $effet->reglementEffet->effet_compte->nom,
@@ -113,6 +113,7 @@ class EffetDebitController extends Controller
             $effet_debit->update([
                 'effet_sie_debit' => $effet->carnet_effet->effet_sie,
                 'effet_id' => $effetId,
+                'date_debit_effet' => $request->input('date_debit_effet'),
                 'effet_series_debit' => $effet->carnet_effet->carnet_series,
                 'effet_banque_debit' => $effet->carnet_effet->bank->nom,
                 'effet_compte_debit' => $effet->reglementEffet->effet_compte->nom,

@@ -119,7 +119,13 @@ class ReglementEffetController extends Controller
                 }
             }
 
-
+            // $effet = Effet::find($request->input('effet_id'));
+            // if ($effet) {
+            //     $effet->update(['status' => 'Consommé']);
+            //     Log::info('Effet status updated to "Consommé"', ['effet_id' => $effet->id]);
+            // } else {
+            //     Log::error('Effet not found for updating status', ['effet_id' => $request->input('effet_id')]);
+            // }
 
             $compteId = $request->input('effet_compte_id');
 
@@ -247,14 +253,14 @@ class ReglementEffetController extends Controller
             switch ($compteNom) {
                 case 'Règlement fournisseurs':
                     $sousCompteId = $request->input('sous_compte_id');
-            
+
                     // Check if 'sous_compte_id' is not null
                     if ($sousCompteId !== null) {
                         // Check if a record already exists
                         $existingRecord = ReglementEffetFournisseur::where('sous_compte_id', $sousCompteId)
                             ->where('reglement_effet_id', $reglementEffet->id)
                             ->first();
-            
+
                         if (!$existingRecord) {
                             // Create a new record only if it doesn't exist
                             ReglementEffetFournisseur::create([
@@ -269,7 +275,7 @@ class ReglementEffetController extends Controller
                         Log::error("sous_compte_id is null. Cannot create a new record.");
                     }
                     break;
-            
+
                 default:
                     // Remove the record from ReglementEffetFournisseur if it exists
                     ReglementEffetFournisseur::where('reglement_effet_id', $reglementEffet->id)->delete();
@@ -315,8 +321,8 @@ class ReglementEffetController extends Controller
     //     return $pdf->download("reglement_effet_$date_reglement.pdf");
     // }
     public function generateReglementEffetPDF($id)
-{
-    $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelEffetImages', 'reglementEffetFournisseur'])->findOrFail($id);
+    {
+        $reglements = ReglementEffet::with(['effet', 'effet_compte', 'bene', 'service', 'RelEffetImages', 'reglementEffetFournisseur'])->findOrFail($id);
         $date_reglement = $reglements->date_reglement;
         $cheque = $reglements->effet->effet_number;
         $compte = $reglements->effet_compte->nom;
@@ -327,72 +333,72 @@ class ReglementEffetController extends Controller
         $montant =    $reglements->montant;
 
 
-    $images = $reglements->RelEffetImages;
-    $imagePaths = [];
+        $images = $reglements->RelEffetImages;
+        $imagePaths = [];
 
-    foreach ($images as $image) {
-        $imagePaths[] = public_path("public/reglement_effet_images/{$image->images}");
-    }
-
-    $imageDirectory = 'reglement_effet_images/';
-
-    // Create the directory if it doesn't exist
-    if (!file_exists(public_path($imageDirectory))) {
-        mkdir(public_path($imageDirectory), 0755, true);
-    }
-
-    // Copy images to the specified directory
-    foreach ($imagePaths as $imagePath) {
-        if (file_exists($imagePath)) {
-            $imageName = basename($imagePath);
-            $newImagePath = public_path("{$imageDirectory}{$imageName}");
-            copy($imagePath, $newImagePath);
-        } else {
-            Log::error("Image not found at path: {$imagePath}");
+        foreach ($images as $image) {
+            $imagePaths[] = public_path("public/reglement_effet_images/{$image->images}");
         }
-    }
 
-    // Define the PDF file name
-    $pdfFileName = "reglement_effet_$date_reglement.pdf";
+        $imageDirectory = 'reglement_effet_images/';
 
-    // Load PDF view with image links
-    $pdf = PDF::loadView('pdf.reglement_effet_pdf', [
-        'title' => $date_reglement,
-        'date' => date('m/d/Y'),
-        'imagePaths' => $imagePaths,
-        'reglements' => $reglements
-    ])->setPaper('a4');
+        // Create the directory if it doesn't exist
+        if (!file_exists(public_path($imageDirectory))) {
+            mkdir(public_path($imageDirectory), 0755, true);
+        }
 
-    // Save the PDF file within the 'public' directory
-    $pdf->save(public_path("pdf/$pdfFileName"));
-
-    // Create a zip archive
-    $zipFileName = "reglement_effet_$date_reglement.zip";
-    $zipFilePath = public_path("pdf/$zipFileName");
-    $zip = new ZipArchive();
-    
-    if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
-        // Add PDF file to the zip archive
-        $zip->addFile(public_path("pdf/$pdfFileName"), $pdfFileName);
-
-        // Add images to the zip archive
+        // Copy images to the specified directory
         foreach ($imagePaths as $imagePath) {
             if (file_exists($imagePath)) {
                 $imageName = basename($imagePath);
-                $zip->addFile($imagePath, "{$imageDirectory}{$imageName}");
+                $newImagePath = public_path("{$imageDirectory}{$imageName}");
+                copy($imagePath, $newImagePath);
             } else {
                 Log::error("Image not found at path: {$imagePath}");
             }
         }
 
-        // Close the zip archive
-        $zip->close();
+        // Define the PDF file name
+        $pdfFileName = "reglement_effet_$date_reglement.pdf";
 
-        // Response with download link
-        return response()->download($zipFilePath);
-    } else {
-        Log::error("Failed to open zip archive");
-        return response()->json(['error' => 'Failed to create zip archive'], 500);
+        // Load PDF view with image links
+        $pdf = PDF::loadView('pdf.reglement_effet_pdf', [
+            'title' => $date_reglement,
+            'date' => date('m/d/Y'),
+            'imagePaths' => $imagePaths,
+            'reglements' => $reglements
+        ])->setPaper('a4');
+
+        // Save the PDF file within the 'public' directory
+        $pdf->save(public_path("pdf/$pdfFileName"));
+
+        // Create a zip archive
+        $zipFileName = "reglement_effet_$date_reglement.zip";
+        $zipFilePath = public_path("pdf/$zipFileName");
+        $zip = new ZipArchive();
+
+        if ($zip->open($zipFilePath, ZipArchive::CREATE | ZipArchive::OVERWRITE) === true) {
+            // Add PDF file to the zip archive
+            $zip->addFile(public_path("pdf/$pdfFileName"), $pdfFileName);
+
+            // Add images to the zip archive
+            foreach ($imagePaths as $imagePath) {
+                if (file_exists($imagePath)) {
+                    $imageName = basename($imagePath);
+                    $zip->addFile($imagePath, "{$imageDirectory}{$imageName}");
+                } else {
+                    Log::error("Image not found at path: {$imagePath}");
+                }
+            }
+
+            // Close the zip archive
+            $zip->close();
+
+            // Response with download link
+            return response()->download($zipFilePath);
+        } else {
+            Log::error("Failed to open zip archive");
+            return response()->json(['error' => 'Failed to create zip archive'], 500);
+        }
     }
-}
 }

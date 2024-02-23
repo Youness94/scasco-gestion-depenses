@@ -395,66 +395,7 @@ class ReglementChequeController extends Controller
     }
 
 
-    // public function generateReglementChequePDF($id)
-    // {
-    //     $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages', 'reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);
-    //     $date_reglement = $reglements->date_reglement;
-    //     $cheque = $reglements->cheque->number;
-    //     $compte = $reglements->compte->nom;
-    //     $bene = $reglements->bene->nom;
-    //     $service = $reglements->service->nom;
-    //     $referance = $reglements->referance;
-    //     $echeance =   $reglements->echeance;
-    //     $montant =    $reglements->montant;
-
-    //     // $data = [
-    //     //     'title' => $date_reglement,
-    //     //     'date' => date('m/d/Y'),
-    //     //     // 'date_reglement' =>  $date_reglement,
-    //     //     // 'cheque' => $cheque ,
-    //     //     // 'compte' => $compte,
-    //     //     // 'bene' => $bene,
-    //     //     // 'service' => $service,
-    //     //     // 'referance' => $referance,
-    //     //     // 'echeance' => $echeance,
-    //     //     // 'montant' => $montant,
-    //     //     'reglements' => $reglements
-    //     // ];
-
-    //     // $pdf = PDF::loadView('pdf.reglement_cheque_pdf', $data)->setPaper('a4');
-    //     // return $pdf->download("reglement_cheque_$date_reglement.pdf");
-
-
-    //     $images = $reglements->RelChequeImages;
-    //     $imagePaths = [];
-
-    //     foreach ($images as $image) {
-    //         $imagePaths[] = public_path("public/reglement_cheque_images/{$image->images}");
-    //     }
-
-    //     $data = [
-    //         'title' => $date_reglement,
-    //         'date' => date('m/d/Y'),
-    //         'reglements' => $reglements,
-    //         'imagePaths' => $imagePaths,
-    //     ];
-
-    //     // Load PDF view
-    //     $pdf = PDF::loadView('pdf.reglement_cheque_pdf', $data)->setPaper('a4');
-
-
-    //     $pdfFileName = "reglement_cheque_$date_reglement.pdf";
-    //     $pdfDirectory = 'pdf/';
-
-    //     if (!file_exists($pdfDirectory)) {
-    //         mkdir($pdfDirectory, 0755, true);
-    //     }
-
-    //     $pdf->save(public_path($pdfDirectory . $pdfFileName));
-
-    //     // Response with download link
-    //     return response()->download(public_path($pdfDirectory . $pdfFileName));
-    // }
+    
     public function generateReglementChequePDF($id)
 {
     $reglements = ReglementCheque::with(['cheque', 'compte', 'bene', 'service', 'RelChequeImages', 'reglementSiniAuto', 'reglementRdp', 'reglementFournisseur', 'reglementCltRistourne'])->findOrFail($id);

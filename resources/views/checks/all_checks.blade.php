@@ -51,7 +51,6 @@
                                                             <th>Série de Chéquier</th>
                                                             <th>Numéro de chéque</th>
                                                             <th>Service</th>
-                                                            <th>Status</th>
                                                       </tr>
                                                 </thead>
                                                 <tbody>
@@ -69,7 +68,6 @@
                                                                   @endif
                                                             </td>
 
-                                                            <td>{{ $item->status }}</td>
                                                       </tr>
                                                       @endforeach
                                                 </tbody>

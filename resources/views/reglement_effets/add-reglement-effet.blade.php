@@ -65,7 +65,7 @@
                                 <div class="col-12 col-sm-4">
                                     <div class="form-group local-forms">
                                         <label for="effet_id" class="form-label">Effet: <span class="login-danger">*</span></label>
-                                        <select class="form-control select @error('effet_id') is-invalid @enderror" name="effet_id" id="effet_id" required>
+                                        <select class="js-example-basic-single form-control select @error('effet_id') is-invalid @enderror" name="effet_id" id="effet_id" required>
                                             <option selected disabled>Sélectionnez</option>
                                             @foreach ($effets as $effet)
                                             <option value="{{ $effet->id }}">{{ $effet->effet_number }}</option>
@@ -192,6 +192,8 @@
                 $('#regl-fournisseur-fields').show();
             }
         });
+        $('.js-example-basic-single').select2();
     });
+    
 </script>
 @endsection

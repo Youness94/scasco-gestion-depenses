@@ -111,6 +111,12 @@
                                                     <td>Echeance</td>
                                                     <td>{{ $reglements->echeance  }}</td>
                                                 </tr>
+                                                @foreach($reglements->reglementEffetFournisseur as $reglementEffetFournisseur)
+                                                <tr>
+                                                    <td>Sous Compte</td>
+                                                    <td> {{ $reglementEffetFournisseur->sousCompte->nom }}</td>
+                                                </tr>
+                                                @endforeach
                                                 <tr>
                                                     <td>Montant</td>
                                                     <td>{{ number_format($reglements->montant ?? 0.00)  }} Dh</td>
@@ -144,16 +150,16 @@
                                     </div>
                                 </div>
                                 @endif
-                               
 
-                            <div class="card-footer bg-black"></div>
+
+                                <div class="card-footer bg-black"></div>
+                            </div>
+
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 
-</div>
-@endsection
+    </div>
+    @endsection

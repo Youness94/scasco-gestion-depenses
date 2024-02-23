@@ -39,10 +39,14 @@
                                 <div class="col">
                                     <h3 class="page-title">Réglements des chèques</h3>
                                 </div>
+                                <div class="col">
+                                        <!-- <label for="searchInput" class="form-label">Recherche:</label> -->
+                                        <input type="text" class="form-control" id="searchInput" placeholder="Entrez un mot clé">
+                                    </div>
                                 <div class="col-auto text-end float-end ms-auto download-grp">
                                     <!-- <a href="#" class="btn btn-outline-primary me-2"><i
                                             class="fas fa-download"></i> Télécharger</a> -->
-                                    <a href="{{ route('add.reglement-cheque') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                    <a href="{{ route('add.reglement-effet') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                                 </div>
                             </div>
                         </div>
@@ -135,4 +139,5 @@
     </div>
 
 </div>
+
 @endsection

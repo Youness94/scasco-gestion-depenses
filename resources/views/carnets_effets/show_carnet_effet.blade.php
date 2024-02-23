@@ -29,11 +29,11 @@
                   <h3 class="page-title">Carnet Effet</h3>
                 </div>
                 <div class="col-auto text-end float-end ms-auto download-grp">
-                  <!-- <a href="#" class="btn btn-outline-primary me-2"><i
-                                            class="fas fa-download"></i> Télécharger</a> -->
-                  <a href="{{route('add.checkbook')}}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                  <!-- <a href="#" class="btn btn-outline-primary me-2"><i class="fas fa-download"></i> Télécharger</a> -->
+                  
+                  <a href="{{route('add.carnet-effet')}}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                 </div>
-              </div>
+                
             </div>
 
             <table class="table border-0 star-student table-hover table-center mb-0 datatable table-striped">
@@ -53,7 +53,13 @@
                     <td>{{ $carnet_effet->carnet_series }}</td>
                     <td>{{ $carnet_effet->effet_sie }}</td>
                     <td>{{ $i }}</td>
-                    <td>{{ $carnet_effet->status }}</td> <!-- Display dynamic status -->
+                    <td>
+                      @foreach ($carnet_effet->effets as $effet)
+                      @if ($effet->effet_number == $i)
+                      {{ $effet->status }}
+                      @endif
+                      @endforeach
+                    </td>
                   </tr>
                   @endfor
               </tbody>
@@ -63,7 +69,7 @@
       </div>
 
 
-      
+
     </div>
   </div>
 </div>

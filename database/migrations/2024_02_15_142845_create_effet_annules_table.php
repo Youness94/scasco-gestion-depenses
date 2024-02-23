@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('effet_id')->constrained('effets')->onDelete('cascade');;
             $table->foreignId('effet_compte_id')->constrained('effet_comptes')->onDelete('cascade');
-            $table->foreignId('benefiiaire_id')->constrained('bene_comptes')->onDelete('cascade');
-            $table->foreignId('service_id')->constrained('services')->onDelete('cascade');
-            $table->decimal('montant_annule', 8,2);
+            $table->foreignId('benefiiaire_id')->constrained('bene_comptes')->onDelete('cascade')->nullable();
+            $table->foreignId('service_id')->constrained('services')->onDelete('cascade')->nullable();
+            $table->decimal('montant_annule', 8,2)->nullable();
             $table->string('series_effet_annule');
             $table->string('bank_effet_annule');
             $table->string('effet_sie_annule')->nullable();

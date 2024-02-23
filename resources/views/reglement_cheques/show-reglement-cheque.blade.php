@@ -114,6 +114,57 @@
                                                 <td>Echeance</td>
                                                 <td>{{ $reglements->echeance  }}</td>
                                             </tr>
+                                            @foreach($reglements->reglementSiniAuto as $reglementSiniAuto)
+                                            <tr>
+                                                <td>Compagnie</td>
+                                                <td>{{ $reglementSiniAuto->companier->nom }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Référance dossier</td>
+                                                <td>{{ $reglementSiniAuto->referance_dossier_auto }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Référance quittance</td>
+                                                <td>{{ $reglementSiniAuto->referance_quittance_auto }}</td>
+                                            </tr>
+                                            @endforeach
+
+                                            @foreach($reglements->reglementRdp as $reglementRdp)
+                                            <tr>
+                                                <td>Compagnie</td>
+                                                <td>{{ $reglementRdp->companier->nom }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Référance dossier</td>
+                                                <td>{{ $reglementRdp->referance_dossier_auto }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Référance quittance</td>
+                                                <td>{{ $reglementRdp->referance_quittance_auto }}</td>
+                                            </tr>
+                                            @endforeach
+
+                                            @foreach($reglements->reglementFournisseur as $reglementFournisseur)
+                                            <tr>
+                                                <td>Sous Compte</td>
+                                                <td>{{ $reglementFournisseur->sousCompte->nom }}</td>
+                                            </tr>
+                                            @endforeach
+
+                                            @foreach($reglements->reglementCltRistourne as $reglementCltRistourne)
+                                            <tr>
+                                                <td>Compagnie</td>
+                                                <td>{{ $reglementCltRistourne->companier->nom }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Référance dossier</td>
+                                                <td>{{ $reglementCltRistourne->referance_diam }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Référance quittance</td>
+                                                <td>{{ $reglementCltRistourne->referance_cie }}</td>
+                                            </tr>
+                                            @endforeach
                                             <tr>
                                                 <td>Montant</td>
                                                 <td>{{ number_format($reglements->montant ?? 0.00)  }} Dh</td>

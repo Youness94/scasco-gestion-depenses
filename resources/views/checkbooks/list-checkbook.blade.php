@@ -53,10 +53,11 @@
                                         <th>Numéro de Départ</th>
                                         <th>Qnt des chèques</th>
                                         <th>Banque</th>
-                                        <th>Status</th>
+                                        <!-- <th>Status</th> -->
                                         <th>Afficher</th>
                                         <th>Modifier</th>
                                         <th>Supprimer</th>
+                                        <th>Valider</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -69,16 +70,50 @@
                                         <td>{{ $item->cheque_sie }} {{ $item->start_number }}</td>
                                         <td>{{$item->quantity}}</td>
                                         <td>{{ optional($item->bank)->nom ?? 'N/A' }}</td>
-                                        <td>{{ $item->status }}</td>
+                                        <!-- <td>{{ $item->status }}</td> -->
                                         <td>
                                             <a href="{{route('show.checkbook',$item->id)}}" class=" btn btn-inverse-danger"><i class="feather-eye"></i></a>
                                         </td>
+                                        <!-- <td>
+                                            <a href="{{route('edit.checkbook',$item->id)}}" class="btn btn-inverse-warning"><i class="feather-edit"></i></a>
+                                        </td>
+                                        <td>
+                                            <a href="{{route('delete.checkbook',$item->id)}}" class=" btn btn-inverse-danger"><i class="feather-trash"></i></a>
+                                        </td> -->
+                                        @if ($item->validation ?? false)
+                                        <td>
+                                            <button class="btn btn-inverse-warning" disabled>
+                                                <i class="feather-edit"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-inverse-danger" disabled>
+                                                <i class="feather-trash"></i>
+                                            </button>
+                                        </td>
+                                        <td>
+                                            <button class="btn btn-inverse-danger" disabled>
+                                            <i class="fa">&#xf078;</i>
+                                            </button>
+                                        </td>
+                                        @else
                                         <td>
                                             <a href="{{route('edit.checkbook',$item->id)}}" class="btn btn-inverse-warning"><i class="feather-edit"></i></a>
                                         </td>
                                         <td>
                                             <a href="{{route('delete.checkbook',$item->id)}}" class=" btn btn-inverse-danger"><i class="feather-trash"></i></a>
                                         </td>
+                                        <td>
+                                            <a href="{{ route('checkbook.validation', $item->id) }}" class="btn btn-inverse-warning">
+                                            <i class="fa">&#xf078;</i>
+                                            </a>
+                                        </td>
+                                        @endif
+                                        <!-- <td>
+                                            <a href="{{ route('checkbook.validation', $item->id) }}" class="btn btn-inverse-warning">
+                                            <i class="fa">&#xf078;</i>
+                                            </a>
+                                        </td> -->
                                     </tr>
                                     @endforeach
                                 </tbody>

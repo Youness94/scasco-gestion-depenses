@@ -55,7 +55,7 @@
                                 <div class="col-12 col-sm-4">
                                     <div class="form-group local-forms">
                                         <label for="chaque_id" class="form-label">Chèque: <span class="login-danger">*</span></label>
-                                        <select class="form-control select @error('cheque_id') is-invalid @enderror" name="cheque_id" id="cheque_id" required>
+                                        <select class="js-example-basic-single form-control form-control select @error('cheque_id') is-invalid @enderror" name="cheque_id" id="cheque_id" required>
                                             <option selected disabled>Sélectionnez</option>
                                             @foreach ($checks as $check)
                                             <option value="{{ $check->id }}">{{ $check->number }}</option>
@@ -289,6 +289,8 @@
                 $('#regl-clt-ristournes-fields').show();
             }
         });
+
+        $('.js-example-basic-single').select2();
 
         
         // function checkIfSelected() {

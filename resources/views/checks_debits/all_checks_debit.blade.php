@@ -48,6 +48,7 @@
                                                 <thead>
                                                       <tr>
                                                             <th>#</th>
+                                                            <th>Date de debit</th>
                                                             <th>Numéro de chéque</th>
                                                             <th>Série de Chéquier</th>
                                                             <th>Compte</th>
@@ -64,6 +65,7 @@
                                                       @foreach ($checks as $key => $item)
                                                       <tr>
                                                             <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $item->date_debit }}</td>
                                                             <td>{{ $item->cheque_sie_debit }}{{ $item->check->number }}</td>
                                                             <td>{{ $item->series_debit }}</td>
                                                             <td>{{ $item->compte_debit }}</td>

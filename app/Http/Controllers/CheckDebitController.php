@@ -54,7 +54,7 @@ class CheckDebitController extends Controller
             $chequeDebit = CheckDebit::create([
                 'cheque_sie_debit' => $check->checkbook->cheque_sie,
                 'check_id' => $checkId,
-                // 'check_id' => $check->number,
+                'date_debit' => $request->input('date_debit'),
                 'series_debit' => $check->checkbook->series,
                 'banque_debit' => $check->checkbook->bank->nom,
                 'compte_debit' => $check->reglementCheque->compte->nom,
@@ -113,6 +113,7 @@ class CheckDebitController extends Controller
             $check_debit->update([
                 'cheque_sie_debit' => $check->checkbook->cheque_sie,
                 'check_id' => $checkId,
+                'date_debit' => $request->input('date_debit'),
                 'series_debit' => $check->checkbook->series,
                 'banque_debit' => $check->checkbook->bank->nom,
                 'compte_debit' => $check->reglementCheque->compte->nom,

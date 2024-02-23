@@ -8,12 +8,13 @@ use App\Models\CarnetEffet;
 use App\Models\Effet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class CarnetEffetController extends Controller
 {
     public function AllCarnetsEffets()
     {
-        $carnets_effets = CarnetEffet::with('bank')->orderBy('created_at', 'desc')->get();
+        $carnets_effets = CarnetEffet::with('bank',)->orderBy('created_at', 'desc')->get();
         return view('carnets_effets.list_carnets_effets', compact('carnets_effets')); //
     }
 
@@ -85,39 +86,101 @@ class CarnetEffetController extends Controller
     return redirect('/login')->with('error', 'Vous devez être connecté pour effectuer cette action');
 }
 }
+public function updateValidation($id)
+{
+    try {
+        $carnetEffet = CarnetEffet::findOrFail($id);
+
+        $carnetEffet->update(['validation' => true]);
+        Log::info( $carnetEffet);
+
+        return redirect('/tous/carnets-effets')->with('success', 'Validation updated successfully');
+    } catch (\Exception $ex) {
+        return redirect('/tous/carnets-effets')->with('error', 'Error updating validation');
+        Log::info( $ex);
+    }
+}
 
     public function ShowCarnetEffet($id)
     {
-        $carnet_effet = CarnetEffet::findOrFail($id);; // Retrieve all clients from the database
+        $carnet_effet = CarnetEffet::findOrFail($id);
+        
         return view('carnets_effets.show_carnet_effet', compact('carnet_effet'));
     }
 
+ 
+
     public function EditCarnetEffet($id)
     {
-        $carnet_effet = CarnetEffet::findOrFail($id);
-        return view('carnets_effets.edit_carnets_effets', compact('carnet_effet'));
+        
+        
+        if (auth()->check()) {
+            $carnet_effet = CarnetEffet::findOrFail($id);
+            $banks = Bank::all();
+            return view('carnets_effets.edit_carnets_effets', compact('carnet_effet','banks'));
+        } else {
+            return redirect('/login')->with('error', 'Vous devez être connecté pour effectuer cette action');
+        }
     }
 
 
     public function UpdateCarnetEffet(Request $request, CarnetEffet $carnet_effet)
     {
 
-        $cbkId = $request->id; // Assuming you're passing the ID through the request
+        $cbkId = $request->id; 
         $carnet_effet = CarnetEffet::findOrFail($cbkId);
 
-        // Update the checkbook record
-        $carnet_effet->update([
-            'reception_date' => $request->reception_date,
-            'series' => $request->series,
-            'bank_id' => $request->bank_name,
-            'effet_sie' => $request->cheque_sie,
-            'effet_start_number' => $request->start_number,
-            'effet_quantity' => $request->quantity,
-            'status' => $request->status,
+        // Dynamically generate the series based on reception_date
+        $formattedDate = Carbon::parse($request->reception_date)->format('dmY');
+        $series = $formattedDate . '01';
+    
+        $lastCarnetEffet = CarnetEffet::whereDate('reception_date', '=', $request->reception_date)->latest()->first();
+    
+        if ($lastCarnetEffet) {
+            $lastSeriesNumber = (int) substr($lastCarnetEffet->series, -2) + 1;
+            $series = $formattedDate . str_pad($lastSeriesNumber, 2, '0', STR_PAD_LEFT);
+        }
+    
+        $checkbookData = array_merge($request->all(), [
+            'carnet_series' => $series,
+            'user_id' => auth()->user()->id,
         ]);
+    
+        // Get the existing checks
+        $existingEffets = $carnet_effet->effets;
+    
+        // Update the checkbook record
+        $carnet_effet->update($checkbookData);
+    
+        // Update or create checks based on the new start number and quantity
+        $startNumber = $carnet_effet->effet_start_number;
+        $quantity = $carnet_effet->effet_quantity;
+    
+        foreach ($existingEffets as $existingEffet) {
+            if ($existingEffet->effet_number >= $startNumber && $existingEffet->effet_number < ($startNumber + $quantity)) {
+                // Update the existing check
+                $existingEffet->update([
+                    'carnet_series' => $carnet_effet->effet_series,
+                    'effet_sie' => $carnet_effet->effet_sie,
+                    'user_id' => auth()->user()->id,
+                ]);
+            } else {
+                
+                $existingEffet->delete();
+            }
+        }
 
-        $carnet_effet->user_id = auth()->user()->id;
-        $carnet_effet->save();
+        for ($i = 0; $i < $quantity; $i++) {
+            $effetNumber = $startNumber + $i;
+    
+            Effet::create([
+                'effet_series' => $carnet_effet->carnet_series,
+                'effet_sie' => $carnet_effet->effet_sie,
+                'effet_number' => $effetNumber,
+                'carnet_effet_id' => $carnet_effet->id,
+                'user_id' => auth()->user()->id,
+            ]);
+        }
 
 
 

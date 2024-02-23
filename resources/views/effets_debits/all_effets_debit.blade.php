@@ -48,6 +48,7 @@
                                                 <thead>
                                                       <tr>
                                                             <th>#</th>
+                                                            <th>Date de debit</th>
                                                             <th>Numéro de Effet</th>
                                                             <th>Série de carnet</th>
                                                             <th>Compte</th>
@@ -64,6 +65,7 @@
                                                       @foreach ($effets as $key => $item)
                                                       <tr>
                                                             <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $item->date_debit_effet }}</td>
                                                             <td>{{ $item->effet_sie_debit }} {{ $item->effet->effet_number }}</td>
                                                             <td>{{ $item->effet_series_debit }}</td>
                                                             <td>{{ $item->effet_compte_debit }}</td>
