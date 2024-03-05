@@ -16,7 +16,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-4 mt-2">
+        <!-- <div class="col-md-4 mt-2">
             <form action="{{ route('store.excel.with.effets') }}" method="POST" enctype="multipart/form-data">
                 @csrf
                 <div class="input-group">
@@ -25,6 +25,43 @@
                     <button type="submit">Import</button>
                 </div>
             </form>
+        </div> -->
+        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">File Import</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <form action="{{ route('store.excel.with.effets') }}" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="col-md-4 mt-2">
+                            <!-- <form action="{{ route('store.excel.with.effets') }}" method="POST" enctype="multipart/form-data"> -->
+                                @csrf
+                                <div class="card">
+                                    <div class="card-body">
+                                        <!-- <h5 class="card-title"></h5> -->
+                                        <div class="input-group mb-3">
+                                            <div class="custom-file">
+                                                <input type="file" class="custom-file-input" id="fileInput" name="file" required>
+                                                <!-- <label class="custom-file-label" for="fileInput">Choose file</label> -->
+                                            </div>
+                                            <!-- <div class="input-group-append">
+                                                <button type="submit" class="btn btn-primary">Import</button>
+                                            </div> -->
+                                        </div>
+                                    </div>
+                                </div>
+                            <!-- </form> -->
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Import</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
         </div>
         @if(session('success'))
         <div class="alert alert-success">
@@ -59,6 +96,9 @@
                                 </div>
                                 <div class="col-auto text-end float-end ms-auto download-grp">
                                     <a href="{{ route('add.carnet-effet') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        import
+                                    </button>
                                 </div>
                             </div>
                         </div>

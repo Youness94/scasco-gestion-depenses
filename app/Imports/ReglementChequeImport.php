@@ -69,7 +69,7 @@ class ReglementChequeImport implements WithHeadingRow, ToModel, WithMapping
         ]);
         $reglementCheque->save();
         $imagePath = $row['images'];
-        dd( $imagePath );
+        // dd( $imagePath );
         if ($imagePath !== null) { 
             ReglementChequeImage::create([
                 'reglement_cheque_id' => $reglementCheque->id,
