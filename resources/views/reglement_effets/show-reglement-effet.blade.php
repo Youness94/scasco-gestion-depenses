@@ -151,7 +151,6 @@
                                 </div>
                                 @endif
 
-
                                 <div class="card-footer bg-black"></div>
                             </div>
 

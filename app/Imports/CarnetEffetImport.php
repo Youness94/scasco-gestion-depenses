@@ -1,4 +1,8 @@
 <?php
+// php artisan make:import ReglementEffetImport --model=ReglementEffet
+//  php artisan make:import ReglementChequeImport --model=ReglementCheque
+//  php artisan make:import CarnetEffetImport --model=CarnetEffet
+//  php artisan make:import CheckbookImport --model=Checkbook 
 
 namespace App\Imports;
 
