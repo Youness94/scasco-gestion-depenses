@@ -140,6 +140,7 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         Route::get('/supprimer/carnet-effet/{id}', 'DeleteCarnetEffet')->name('delete.carnet-effet');
 
         Route::get('/search/carnet-effet', 'search_carnet_effet')->name('carnet_effet.search');
+        Route::post('/store-excel-with-effets', 'storeExcelCarnetEffet')->name('store.excel.with.effets');
     });
     Route::controller(EffetServiceController::class)->group(function () {
         Route::get('/tous/effet-services', 'AllEffetServices')->name('all.effet-services');
@@ -178,10 +179,11 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         Route::get('/delete/reglement-effet/{id}', 'DeleteReglementEffet')->name('delete.reglement-effet');
         Route::get('/show/reglement-effet/{id}', 'ShowReglementEffet')->name('show.reglement-effet');
         // Route::get('/ajouter/reglement-cheque-test', 'testFunction')->name('ajouter.reglement-cheque-test');
-        
+
         Route::get('/download-reglement-effet-pdf/{id}', 'generateReglementEffetPDF')->name('download.reglement.effet.pdf');
         Route::get('/search/reglement-effet', 'search_reglement_effet')->name('reglement_effet.search');
         // Route::get('/checkIfEffetSelected', 'checkIfEffetSelected')->name('checkIfEffetSelected');
+        Route::post('/store-excel-reglement-effet', 'storeExcelReglementEffet')->name('store.excel.reglement.effet');
     });
 
     Route::controller(EffetAnnuleController::class)->group(function () {
@@ -224,6 +226,9 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         Route::get('/valider/checkbook/{id}', 'updateValidation')->name('checkbook.validation');
 
         Route::get('/search/checkbook', 'search_checkbook')->name('checkbook.search');
+
+
+        Route::post('/store-excel-with-checks', 'storeExcelCheckbook')->name('store.excel.with.checks');
     });
 
 
@@ -358,9 +363,11 @@ Route::group(['middleware' => 'checkRole:Super Admin'], function () {
         Route::get('/delete/reglement-cheque/{id}', 'DeleteReglementCheque')->name('delete.reglement-cheque');
         Route::get('/show/reglement-cheque/{id}', 'ShowReglementCheque')->name('show.reglement-cheque');
         // Route::get('/ajouter/reglement-cheque-test', 'testFunction')->name('ajouter.reglement-cheque-test');
-        
+
         Route::get('/download-reglement-pdf/{id}', 'generateReglementChequePDF')->name('download.reglement.pdf');
         Route::get('/search/reglement-cheque', 'search_reglement_cheque')->name('reglement_cheque.search');
         Route::get('/checkIfChequeSelected', 'checkIfChequeSelected')->name('checkIfChequeSelected');
+
+        Route::post('/store-excel-reglement-cheque', 'storeExcelReglementCheque')->name('store.excel.reglement.cheque');
     });
 });

@@ -9,6 +9,7 @@
             <div class="row align-items-center">
                 <div class="col">
                     <h3 class="page-title">Chéquiers</h3>
+                    
                     <ul class="breadcrumb">
                         <li class="breadcrumb-item"><a href="{{ route('accueil') }}">Tableau de Bord</a></li>
                         <li class="breadcrumb-item active">Chéquiers</li>
@@ -16,6 +17,18 @@
                 </div>
             </div>
         </div>
+
+        <div class="col-md-4 mt-2">
+            <form action="{{ route('store.excel.with.checks') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="input-group">
+                    @csrf
+                    <input type="file" name="file" required>
+                    <button type="submit">Import</button>
+                </div>
+            </form>
+        </div>
+
         @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}
@@ -38,7 +51,7 @@
                                     <h3 class="page-title">Chéquiers</h3>
                                 </div>
                                 <div class="col-md-4 mt-2">
-                                    <form action="{{ route('checkbook.search') }}" method="GET" >
+                                    <form action="{{ route('checkbook.search') }}" method="GET">
                                         @csrf
                                         <div class="input-group">
                                             <input type="text" class="form-control" name="search" placeholder="Search" aria-label="Search" aria-describedby="button-addon2">
@@ -48,7 +61,7 @@
                                     </form>
                                 </div>
                                 <div class="col-auto text-end float-end ms-auto download-grp">
-                                <a href="{{ route('add.checkbook') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
+                                    <a href="{{ route('add.checkbook') }}" class="btn btn-primary"><i class="fas fa-plus"></i></a>
                                 </div>
                             </div>
                         </div>

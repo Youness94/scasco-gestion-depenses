@@ -9,7 +9,18 @@ class ReglementCheque extends Model
 {
     use HasFactory;
 
-    protected $guarded = [];
+    // protected $guarded = [];
+    protected $table = 'reglement_cheques';
+    protected $fillable = [
+        'date_reglement',
+        'cheque_id',
+        'compte_id',
+        'benefiiaire_id',
+        'service_id',
+        'montant',
+        'echeance',
+        'referance',
+    ];
     public function user()
     {
         return $this->belongsTo(User::class);

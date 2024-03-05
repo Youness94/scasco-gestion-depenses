@@ -8,7 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class Check extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    // protected $guarded = [];
+    protected $table = 'checks';
+    protected $fillable = [
+        'series',
+        'cheque_sie',
+        'number',
+        'checkbook_id',
+        'user_id',
+    ];
 
     public function user()
     {

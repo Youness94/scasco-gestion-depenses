@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Imports\ReglementChequeImport;
 use App\Models\BeneCompte;
 use App\Models\Check;
 use App\Models\Compagnie;
@@ -20,6 +21,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 use App\Rules\UniqueChequeId;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Facades\Storage;
@@ -519,6 +521,37 @@ class ReglementChequeController extends Controller
         } else {
             Log::error("Failed to open zip archive");
             return response()->json(['error' => 'Failed to create zip archive'], 500);
+        }
+    }
+    public function storeExcelReglementCheque(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        try {
+        //     $uploadPath = 'public/reglement_cheque_images/';
+        //   $file=  $request->file('file');
+        //   $namefile = $file->getClientOriginalExtension();
+        //   $file ->move($uploadPath,$namefile);
+        //     $import = new ReglementChequeImport();
+            
+        //     Excel::import($import, $request->file('file'));
+        $uploadPath = 'public/reglement_cheque_images/';
+        $file = $request->file('file');
+        $namefile = $file->getClientOriginalName();
+        $file->move($uploadPath, $namefile);
+
+        $import = new ReglementChequeImport($uploadPath . $namefile);
+
+        Excel::import($import, $uploadPath . $namefile);
+            // dd($file);
+
+            // $this->processEffets($import->getCarneteffets());
+            Log::info(' Reglement Cheque  imported successfully.');
+            return redirect()->back()->with('success', 'Reglement Cheque imported successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error importing Reglement Cheque : ' . $e->getMessage());
         }
     }
 }

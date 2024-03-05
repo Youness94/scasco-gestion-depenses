@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('cheque_sie');
             $table->integer('start_number');
             $table->integer('quantity');
-            $table->enum('status', ['Consomé', 'No Consomé'])->default('No Consomé');
+            // $table->enum('status', ['Consomé', 'No Consomé'])->default('No Consomé');
             $table->foreignId('user_id')->constrained('users');
             $table->timestamps();
         });

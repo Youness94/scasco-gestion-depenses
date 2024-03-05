@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Effet;
 
 use App\Http\Controllers\Controller;
+use App\Imports\ReglementEffetImport;
 use App\Models\BeneCompte;
 use App\Models\Compagnie;
 use App\Models\Effet;
@@ -16,6 +17,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 use ZipArchive;
 
 class ReglementEffetController extends Controller
@@ -429,6 +431,38 @@ class ReglementEffetController extends Controller
         } else {
             Log::error("Failed to open zip archive");
             return response()->json(['error' => 'Failed to create zip archive'], 500);
+        }
+    }
+
+    public function storeExcelReglementEffet(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        try {
+        //     $uploadPath = 'public/reglement_cheque_images/';
+        //   $file=  $request->file('file');
+        //   $namefile = $file->getClientOriginalExtension();
+        //   $file ->move($uploadPath,$namefile);
+        //     $import = new ReglementChequeImport();
+            
+        //     Excel::import($import, $request->file('file'));
+        $uploadPath = 'public/reglement_effet_images/';
+        $file = $request->file('file');
+        $namefile = $file->getClientOriginalName(); 
+        $file->move($uploadPath, $namefile);
+
+        $import = new ReglementEffetImport($uploadPath . $namefile);
+
+        Excel::import($import, $uploadPath . $namefile);
+            // dd($file);
+
+            // $this->processEffets($import->getCarneteffets());
+            Log::info(' Effet imported successfully.');
+            return redirect()->back()->with('success', 'Effet imported successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error importing Effet : ' . $e->getMessage());
         }
     }
 }

@@ -11,8 +11,14 @@ class ReglementSiniRdp extends Model
 
 
     protected $table = 'reglements_sinirdps';
-
-    protected $guarded = [];
+    protected $fillable = [
+        'companier_id',
+        'referance_dossier',
+        'referance_quittance',
+        'reglement_cheque_id',
+        
+    ];
+    // protected $guarded = [];
     public function user()
     {
         return $this->belongsTo(User::class);

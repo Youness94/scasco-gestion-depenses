@@ -8,7 +8,19 @@ use Illuminate\Database\Eloquent\Model;
 class Checkbook extends Model
 {
     use HasFactory;
-    protected $guarded = [];
+    // protected $guarded = [];
+ protected $table = 'checkbooks';
+    protected $fillable = [
+        'reception_date',
+        'series',
+        'bank_id',
+        'cheque_sie',
+        'start_number',
+        'quantity',
+        'user_id',
+        'validation',
+    ];
+    
     public function user()
     {
         return $this->belongsTo(User::class);

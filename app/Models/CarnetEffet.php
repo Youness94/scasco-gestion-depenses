@@ -10,6 +10,17 @@ class CarnetEffet extends Model
     use HasFactory;
 
     protected $table = 'carnet_effets';
+    protected $fillable = [
+        'reception_date',
+        'carnet_series',
+        'bank_id',
+        'effet_sie',
+        'effet_start_number',
+        'effet_quantity',
+        'user_id',
+        'validation',
+    ];
+
 
     protected $guarded = [];
     public function user()

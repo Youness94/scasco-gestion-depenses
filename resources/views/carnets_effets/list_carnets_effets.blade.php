@@ -16,6 +16,16 @@
                 </div>
             </div>
         </div>
+        <div class="col-md-4 mt-2">
+            <form action="{{ route('store.excel.with.effets') }}" method="POST" enctype="multipart/form-data">
+                @csrf
+                <div class="input-group">
+                    @csrf
+                    <input type="file" name="file" required>
+                    <button type="submit">Import</button>
+                </div>
+            </form>
+        </div>
         @if(session('success'))
         <div class="alert alert-success">
             {{ session('success') }}

@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Effet;
 
 use App\Http\Controllers\Controller;
+use App\Imports\CarnetEffetImport;
 use App\Models\Bank;
 use App\Models\CarnetEffet;
 use App\Models\Effet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Maatwebsite\Excel\Facades\Excel;
 
 class CarnetEffetController extends Controller
 {
@@ -208,4 +210,57 @@ public function updateValidation($id)
         CarnetEffet::findOrFail($id)->delete();
         return redirect('/tous/carnets-effets')->with('success', 'Carnet Effet deleted successfully');
     }
+
+    public function storeExcelCarnetEffet(Request $request)
+    {
+        $request->validate([
+            'file' => 'required|mimes:xlsx,xls',
+        ]);
+
+        try {
+             
+          $file=  $request->file('file');
+            $import = new CarnetEffetImport();
+            
+            Excel::import($import, $request->file('file'));
+            // dd($file);
+            // Now, calculate and store the checks for each imported checkbook
+            $this->processEffets($import->getCarneteffets());
+            Log::info('Carnet Effet  imported successfully.');
+            return redirect()->back()->with('success', 'Carnet Effet imported successfully.');
+        } catch (\Exception $e) {
+            return redirect()->back()->with('error', 'Error importing Carnet Effet : ' . $e->getMessage());
+        }
+    }
+   
+
+    private function processEffets($carnetEffets)
+    {
+        // dd($checkbooks);
+        foreach ($carnetEffets as $carnetEffet) {
+            $startNumber = $carnetEffet->effet_start_number;
+            $remainingEffets = $carnetEffet->effet_quantity - $carnetEffet->effets()->count();
+// dd($remainingEffets);
+            for ($i = 0; $i < $remainingEffets; $i++) {
+                $effetNumber = $startNumber + $i;
+                
+                $carnetEffet->effets()->create([
+                    'effet_series' => $carnetEffet->carnet_series,
+                    'effet_sie' => $carnetEffet->effet_sie,
+                    'effet_number' => $effetNumber,
+                    'carnet_effet_id' => $carnetEffet->id,
+                    'user_id' => auth()->user()->id,
+                ]);
+            //      Effet::create([
+            //         'effet_series' => $carnetEffet->carnet_series,
+            // 'effet_sie' => $carnetEffet->effet_sie,
+            // 'effet_number' => $effetNumber,
+            // 'carnet_effet_id' => $carnetEffet->id,
+            // 'user_id' => auth()->user()->id,
+            //     ]);
+            }
+        }
+    }
+
+   
 }

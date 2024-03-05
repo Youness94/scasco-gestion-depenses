@@ -9,7 +9,14 @@ class ReglementCltRistourn extends Model
 {
     use HasFactory;
     protected $table = 'reglements_clt_ristournes';
-    protected $guarded = [];
+    // protected $guarded = [];
+    protected $fillable = [
+        'companier_id',
+        'referance_diam',
+        'referance_cie',
+        'reglement_cheque_id',
+        
+    ];
     public function user()
     {
         return $this->belongsTo(User::class);

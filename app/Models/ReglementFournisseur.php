@@ -10,8 +10,12 @@ class ReglementFournisseur extends Model
     use HasFactory;
 
     protected $table = 'reglements_frss';
-
-    protected $guarded = [];
+    protected $fillable = [
+        'sous_compte_id',
+        'reglement_cheque_id',
+        
+    ];
+    // protected $guarded = [];
     public function user()
     {
         return $this->belongsTo(User::class);
